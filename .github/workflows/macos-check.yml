@@ -1,0 +1,34 @@
+name: PixNab macOS build and core tests
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  macos:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-14, macos-15]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Toolchain information
+        run: |
+          xcodebuild -version
+          swift --version
+      - name: Core tests, lint and native app compilation
+        run: ./run.sh --check
+      - name: Assemble ad-hoc signed QA app
+        run: ./run.sh --build
+      - name: Verify bundle signature
+        run: codesign --verify --verbose=2 dist/PixNab.app
+      - name: Upload QA bundle
+        uses: actions/upload-artifact@v4
+        with:
+          name: PixNab-macOS-QA-${{ matrix.os }}
+          path: dist/PixNab.app
+          if-no-files-found: error
