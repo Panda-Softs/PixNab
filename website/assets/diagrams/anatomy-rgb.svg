@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="470" height="320" viewBox="0 0 470 320" role="img" aria-label="Original illustration of the 12-hue RGB color wheel: primary red green blue, secondary yellow cyan magenta">
+<title>The RGB wheel: primary, secondary and intermediate hues</title>
+<rect width="470" height="320" rx="25" fill="#111d35"/>
+<rect x="1" y="1" width="468" height="318" rx="24" stroke="#52658a" stroke-opacity=".45" fill="none"/>
+<path d="M133.20,45.05 A119 119 0 0 1 194.80,45.05 L180.56,98.18 A64 64 0 0 0 147.44,98.18Z" fill="#ff1414" stroke="#111d35" stroke-width="2"/>
+<path d="M194.80,45.05 A119 119 0 0 1 248.15,75.85 L209.25,114.75 A64 64 0 0 0 180.56,98.18Z" fill="#ff8a14" stroke="#111d35" stroke-width="2"/>
+<path d="M248.15,75.85 A119 119 0 0 1 278.95,129.20 L225.82,143.44 A64 64 0 0 0 209.25,114.75Z" fill="#ffff14" stroke="#111d35" stroke-width="2"/>
+<path d="M278.95,129.20 A119 119 0 0 1 278.95,190.80 L225.82,176.56 A64 64 0 0 0 225.82,143.44Z" fill="#8aff14" stroke="#111d35" stroke-width="2"/>
+<path d="M278.95,190.80 A119 119 0 0 1 248.15,244.15 L209.25,205.25 A64 64 0 0 0 225.82,176.56Z" fill="#14ff14" stroke="#111d35" stroke-width="2"/>
+<path d="M248.15,244.15 A119 119 0 0 1 194.80,274.95 L180.56,221.82 A64 64 0 0 0 209.25,205.25Z" fill="#14ff8a" stroke="#111d35" stroke-width="2"/>
+<path d="M194.80,274.95 A119 119 0 0 1 133.20,274.95 L147.44,221.82 A64 64 0 0 0 180.56,221.82Z" fill="#14ffff" stroke="#111d35" stroke-width="2"/>
+<path d="M133.20,274.95 A119 119 0 0 1 79.85,244.15 L118.75,205.25 A64 64 0 0 0 147.44,221.82Z" fill="#148aff" stroke="#111d35" stroke-width="2"/>
+<path d="M79.85,244.15 A119 119 0 0 1 49.05,190.80 L102.18,176.56 A64 64 0 0 0 118.75,205.25Z" fill="#1414ff" stroke="#111d35" stroke-width="2"/>
+<path d="M49.05,190.80 A119 119 0 0 1 49.05,129.20 L102.18,143.44 A64 64 0 0 0 102.18,176.56Z" fill="#8a14ff" stroke="#111d35" stroke-width="2"/>
+<path d="M49.05,129.20 A119 119 0 0 1 79.85,75.85 L118.75,114.75 A64 64 0 0 0 102.18,143.44Z" fill="#ff14ff" stroke="#111d35" stroke-width="2"/>
+<path d="M79.85,75.85 A119 119 0 0 1 133.20,45.05 L147.44,98.18 A64 64 0 0 0 118.75,114.75Z" fill="#ff148a" stroke="#111d35" stroke-width="2"/>
+<circle cx="164" cy="160" r="58" fill="#0a1225" stroke="#8191b4" stroke-opacity=".4"/>
+<text x="164" y="155" fill="white" text-anchor="middle" font-size="17" font-weight="bold" font-family="Arial">RGB</text><text x="164" y="173" fill="#9eb4d7" text-anchor="middle" font-size="11" font-family="Arial">12 hues</text>
+<text x="313" y="105" font-size="12" font-weight="800" fill="#f9faff" font-family="Arial">PRIMARY</text>
+<text x="313" y="130" font-size="13" font-weight="500" fill="#91c8fa" font-family="Arial">Red  ·  Green  ·  Blue</text>
+<text x="313" y="190" font-size="12" font-weight="800" fill="#f9faff" font-family="Arial">SECONDARY</text>
+<text x="313" y="215" font-size="13" font-weight="500" fill="#f6b0db" font-family="Arial">Cyan  ·  Magenta  ·  Yellow</text>
+<text x="313" y="267" font-size="12" font-weight="800" fill="#f9faff" font-family="Arial">TERTIARY</text>
+<text x="313" y="289" font-size="13" font-weight="500" fill="#9eb5d6" font-family="Arial">Hues in between</text>
+</svg>

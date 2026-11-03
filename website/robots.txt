@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://panda-softs.github.io/PixNab/sitemap.xml
