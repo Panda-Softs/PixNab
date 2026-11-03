@@ -3,353 +3,110 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#070e21">
-  <meta name="color-scheme" content="dark">
-  <meta name="description" content="PixNab is a premium native macOS color picker with a precision magnifier, Color Wheel, 300 ready-to-use palettes, OKLCH scales and design exports.">
-  <meta property="og:type" content="website">
-  <meta property="og:title" content="PixNab — Every color. Every detail.">
-  <meta property="og:description" content="A beautiful native color picker & color studio for macOS.">
-  <meta property="og:image" content="https://panda-softs.github.io/PixNab/assets/social.jpg">
+  <meta name="theme-color" content="#061225">
+  <meta name="description" content="PixNab is a native macOS color picker with pixel-accurate magnification, 300 curated palettes, color harmonies, OKLCH scales and 33 export formats.">
+  <meta property="og:type" content="website"><meta property="og:title" content="PixNab — Premium Color Picker for macOS">
+  <meta property="og:description" content="Pick any pixel. Design exceptional palettes. Build beautiful color systems.">
   <meta property="og:url" content="https://panda-softs.github.io/PixNab/">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta property="og:locale" content="en_US">
-  <link rel="canonical" href="https://panda-softs.github.io/PixNab/">
-  <link rel="icon" href="./assets/favicon.ico" sizes="any">
-  <link rel="icon" type="image/png" sizes="32x32" href="./assets/favicon-32.png">
-  <link rel="apple-touch-icon" href="./assets/apple-touch-icon.png">
-  <link rel="manifest" href="./site.webmanifest">
-  <link rel="preload" href="./assets/macaw.webp" as="image" type="image/webp">
-  <link rel="stylesheet" href="./styles.css">
-  <script src="./app.js" defer></script>
-  <title>PixNab — Premium macOS color picker &amp; Color Studio</title>
+  <meta property="og:image" content="https://panda-softs.github.io/PixNab/assets/social.jpg">
+  <title>PixNab — The premium color picker for macOS</title>
+  <link rel="icon" type="image/x-icon" href="./assets/favicon.ico"><link rel="icon" type="image/png" sizes="32x32" href="./assets/favicon-32.png">
+  <link rel="apple-touch-icon" href="./assets/apple-touch-icon.png"><link rel="manifest" href="./site.webmanifest">
+  <link rel="stylesheet" href="./styles.css"><script src="./app.js" defer></script>
 </head>
 <body>
-  <a class="skip-link" href="#main" data-i18n="skip">Aller au contenu</a>
-  <div class="site-shell">
-    <header class="site-header" id="top">
-      <div class="container header-inner">
-        <a class="brand" href="#top" aria-label="PixNab — accueil">
-          <img src="./assets/pixnab-app-icon.png" alt="" width="38" height="38">
-          <span>PixNab<span class="brand-dot">.</span></span>
-        </a>
-        <button class="nav-toggle" type="button" aria-controls="primary-nav" aria-expanded="false" aria-label="Ouvrir le menu"><span></span><span></span><span></span></button>
-        <nav class="primary-nav" id="primary-nav" aria-label="Navigation principale">
-          <a href="#studio" data-i18n="navStudio">Color Studio</a>
-          <a href="#wheel" data-i18n="navWheel">Roue chromatique</a>
-          <a href="#precision" data-i18n="navPrecision">Précision</a>
-          <a href="#formats" data-i18n="navFormats">Formats</a>
-          <a href="#screenshots" data-i18n="navScreenshots">Screenshots</a>
-          <a class="nav-github" href="https://github.com/Panda-Softs/PixNab" target="_blank" rel="noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
-        </nav>
-        <div class="header-actions">
-          <button type="button" class="locale-toggle" id="locale-toggle" aria-label="Switch to English" title="Switch to English">EN</button>
-          <a class="button button--small button--vibrant" href="https://github.com/Panda-Softs/PixNab/releases" target="_blank" rel="noopener noreferrer"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m0 0 4-4m-4 4-4-4M4 17v3h16v-3"/></svg><span data-i18n="navReleases">Versions</span></a>
-        </div>
-      </div>
-    </header>
+<svg aria-hidden="true" class="svg-sprite" xmlns="http://www.w3.org/2000/svg">
+ <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3v12m0 0 5-5m-5 5-5-5M4 17v3h16v-3"/></symbol>
+ <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M4 12h16m-7-7 7 7-7 7"/></symbol>
+ <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="7"/><circle cx="12" cy="12" r="2"/><path d="M12 1v5m0 12v5M1 12h5m12 0h5"/></symbol>
+ <symbol id="i-layers" viewBox="0 0 24 24"><path d="m12 3 9 5-9 5-9-5 9-5Zm-9 10 9 5 9-5M3 18l9 5 9-5"/></symbol>
+ <symbol id="i-code" viewBox="0 0 24 24"><path d="m8 5-6 7 6 7m8-14 6 7-6 7m-3-16-4 24"/></symbol>
+ <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol>
+ <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="13" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></symbol>
+ <symbol id="i-scale" viewBox="0 0 24 24"><path d="M12 3v18M5 7h14M4 8l-3 7h6L4 8Zm16 0-3 7h6l-3-7ZM7 21h10"/></symbol>
+ <symbol id="i-settings" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="m10 2-1 3-3 1-3-1-2 3 2 2v4l-2 2 2 3 3-1 3 1 1 3h4l1-3 3-1 3 1 2-3-2-2v-4l2-2-2-3-3 1-3-1-1-3z"/></symbol>
+ <symbol id="i-github" viewBox="0 0 24 24"><path d="M9 20c-4 1-5-2-6-2m12 4v-3a3 3 0 0 0-1-3c4 0 7-2 7-7a5 5 0 0 0-1-4 4 4 0 0 0 0-4s-3 0-4 2a14 14 0 0 0-8 0C7 1 4 1 4 1a4 4 0 0 0 0 4 5 5 0 0 0-1 4c0 5 3 7 7 7a3 3 0 0 0-1 3v3"/></symbol>
+ <symbol id="i-monitor" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="15" rx="2"/><path d="M8 22h8m-4-4v4"/></symbol>
+ <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></symbol>
+</svg>
+<div class="page-shell">
+<header class="site-header" id="top"><div class="nav-shell container">
+ <a href="#top" class="brand" aria-label="PixNab — Home"><img src="./assets/pixnab-app-icon.png" width="38" height="38" alt=""><strong>PixNab</strong></a>
+ <nav class="primary-nav" aria-label="Main navigation">
+  <a href="#features" data-i18n="navFeatures">Features</a><a href="#studio">Color Studio</a><a href="#wheel">Color Wheel</a><a href="#precision" data-i18n="navPrecision">Precision Picker</a><a href="#formats" data-i18n="navFormats">Formats</a><a href="#screenshots" data-i18n="navGallery">Screenshots</a>
+ </nav>
+ <div class="nav-right"><a href="https://github.com/Panda-Softs/PixNab" class="github-link" target="_blank" rel="noopener noreferrer"><svg><use href="#i-github"/></svg><span>GitHub</span></a><button id="locale-toggle" class="locale-toggle" type="button" aria-label="Changer la langue en français">FR</button><a class="button button-primary button-header" href="https://github.com/Panda-Softs/PixNab/releases" target="_blank" rel="noopener noreferrer"><svg><use href="#i-download"/></svg><span data-i18n="download">Download for macOS</span></a></div>
+ <button id="menu-toggle" type="button" class="menu-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-nav"><svg><use href="#i-menu"/></svg></button>
+</div><nav id="mobile-nav" class="mobile-nav container" aria-label="Mobile navigation" hidden><a href="#features" data-i18n="navFeatures">Features</a><a href="#studio">Color Studio</a><a href="#wheel">Color Wheel</a><a href="#precision" data-i18n="navPrecision">Precision Picker</a><a href="#formats" data-i18n="navFormats">Formats</a><a href="#screenshots" data-i18n="navGallery">Screenshots</a><a href="https://github.com/Panda-Softs/PixNab">GitHub</a></nav></header>
 
-    <main id="main">
-      <section class="hero section-orbit" aria-labelledby="hero-title">
-        <div class="hero-aurora hero-aurora--one" aria-hidden="true"></div>
-        <div class="hero-aurora hero-aurora--two" aria-hidden="true"></div>
-        <div class="container hero-grid">
-          <div class="hero-copy" data-reveal>
-            <div class="eyebrow"><span class="eyebrow-light" aria-hidden="true"></span><span data-i18n="heroEyebrow">L'atelier couleur natif pour macOS</span></div>
-            <h1 id="hero-title"><span data-i18n="heroLine1">The premium<br>color picker</span><br><span class="text-gradient" data-i18n="heroLine2">for macOS.</span></h1>
-            <p class="hero-lead" data-i18n="heroLead">Capture any color on your Mac, explore vibrant harmonies, discover 300 web-ready palettes and turn every shade into a design system.</p>
-            <div class="hero-actions">
-              <a class="button button--vibrant button--large" href="https://github.com/Panda-Softs/PixNab" target="_blank" rel="noopener noreferrer"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg><span data-i18n="heroPrimary">View on GitHub</span><span aria-hidden="true">↗</span></a>
-              <a class="button button--outline button--large" href="#studio"><span data-i18n="heroSecondary">Explore Color Studio</span><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></a>
-            </div>
-            <div class="hero-facts">
-              <span><span class="fact-icon">⌘</span> <span data-i18n="factNative">Native to macOS</span></span>
-              <span><span class="fact-icon">◈</span> <span data-i18n="factPalettes">300 palettes</span></span>
-              <span><span class="fact-icon">✦</span> <span data-i18n="factFormats">33 color formats</span></span>
-            </div>
-          </div>
-          <div class="hero-macaw" data-reveal>
-            <div class="hero-macaw__glow" aria-hidden="true"></div>
-            <div class="macaw-figure" id="macaw-figure" tabindex="0" role="group" aria-label="Interactive scarlet macaw color picker. Move your pointer or use arrow keys to sample the image.">
-              <img src="./assets/macaw.webp" id="macaw-photo" alt="Vibrant scarlet macaw with red, orange, yellow and blue feathers." width="850" height="567" fetchpriority="high" draggable="false">
-              <div class="macaw-lens" id="macaw-lens" aria-hidden="true">
-                <canvas id="macaw-canvas" width="480" height="480"></canvas>
-                <span class="lens-crosshair"></span>
-                <span class="macaw-value" id="macaw-value"><span class="macaw-value__kind">CSS HEX</span><strong id="macaw-hex">#E1062C</strong></span>
-              </div>
-              <span class="macaw-lens-shadow" aria-hidden="true"></span>
-            </div>
-            <div class="hero-macaw__caption" aria-hidden="true"><span class="hero-macaw__indicator"></span><span data-i18n="heroLensHint">Live pixel magnifier · Move your cursor to explore</span><span class="hero-macaw__color" id="macaw-swatch"></span></div>
-          </div>
-        </div>
-        <div class="hero-horizon" aria-hidden="true"><span></span><span></span><span></span></div>
-      </section>
-
-      <section class="feature-nav" aria-label="Key features">
-        <div class="container feature-nav-grid">
-          <a class="quick-card quick-card--pink" href="#precision" data-reveal><span class="quick-card__icon">◎</span><strong data-i18n="quick1Title">Pixel perfect</strong><small data-i18n="quick1Text">Capture au pixel près</small><span class="quick-arrow" aria-hidden="true">↗</span></a>
-          <a class="quick-card quick-card--violet" href="#wheel" data-reveal><span class="quick-card__icon">◉</span><strong data-i18n="quick2Title">Color Wheel</strong><small data-i18n="quick2Text">Harmonies instantanées</small><span class="quick-arrow" aria-hidden="true">↗</span></a>
-          <a class="quick-card quick-card--blue" href="#studio" data-reveal><span class="quick-card__icon">▧</span><strong data-i18n="quick3Title">Color Studio</strong><small data-i18n="quick3Text">300 palettes à explorer</small><span class="quick-arrow" aria-hidden="true">↗</span></a>
-          <a class="quick-card quick-card--cyan" href="#formats" data-reveal><span class="quick-card__icon">{ }</span><strong data-i18n="quick4Title">33 formats</strong><small data-i18n="quick4Text">De la capture au code</small><span class="quick-arrow" aria-hidden="true">↗</span></a>
-        </div>
-      </section>
-
-      <section class="section studio-section" id="studio" aria-labelledby="studio-title">
-        <div class="container">
-          <div class="section-heading section-heading--center" data-reveal>
-            <span class="section-label section-label--cyan"><span aria-hidden="true">✦</span> COLOR STUDIO</span>
-            <h2 id="studio-title" data-i18n="studioTitle">Discover, create,<br><span class="text-gradient">and organize palettes.</span></h2>
-            <p data-i18n="studioLead">Explore 300 web-ready palettes—30 selected and 270 original PixNab compositions—preview them on a website and save your favorites.</p>
-          </div>
-          <div class="app-spotlight" data-reveal>
-            <div class="app-spotlight__glow" aria-hidden="true"></div>
-            <a href="./assets/screenshots/studio-discover.webp" data-lightbox class="screenshot-frame screenshot-frame--wide"><img loading="lazy" src="./assets/screenshots/studio-discover.webp" width="1400" height="1067" alt="Color Studio : palettes classées par catégorie, nuanciers et prévisualisation de site"/></a>
-            <div class="spotlight-label spotlight-label--left"><strong>300</strong><span data-i18n="studioBadge1">palettes inspirantes</span></div>
-            <div class="spotlight-label spotlight-label--right"><span class="mini-swatch mini-swatch--a"></span><span class="mini-swatch mini-swatch--b"></span><span class="mini-swatch mini-swatch--c"></span><span class="mini-swatch mini-swatch--d"></span><span class="mini-swatch mini-swatch--e"></span></div>
-          </div>
-          <div class="features-points" data-reveal>
-            <div><span class="features-points__glyph">01</span><strong data-i18n="studioPoint1">Explore par univers</strong><span data-i18n="studioPoint1Text">SaaS, e-commerce, finance, éditorial et plus.</span></div>
-            <div><span class="features-points__glyph">02</span><strong data-i18n="studioPoint2">Compose à ton goût</strong><span data-i18n="studioPoint2Text">Enregistre, organise, compare et réutilise.</span></div>
-            <div><span class="features-points__glyph">03</span><strong data-i18n="studioPoint3">Imagine en contexte</strong><span data-i18n="studioPoint3Text">Vois ta palette dans une vraie maquette web.</span></div>
-          </div>
-        </div>
-      </section>
-
-      <section class="section scale-section" id="scales" aria-labelledby="scale-title">
-        <div class="container split-layout split-layout--left">
-          <div class="split-copy" data-reveal>
-            <span class="section-label section-label--yellow">OKLCH COLOR SCALES</span>
-            <h2 id="scale-title" data-i18n="scaleTitle">One color.<br><span class="text-gradient text-gradient--warm">A whole system.</span></h2>
-            <p data-i18n="scaleText">Transforme une couleur en onze nuances cohérentes, du 50 au 950. Exporte-les directement en variables CSS, JSON ou SwiftUI.</p>
-            <ul class="check-list"><li data-i18n="scaleBullet1">Nuances perceptuelles en OKLCH</li><li data-i18n="scaleBullet2">Ta couleur originale au niveau 500</li><li data-i18n="scaleBullet3">Tokens prêts pour le design system</li></ul>
-            <div class="tokens-demo" aria-label="Exemple de tokens CSS"><div class="tokens-demo__head"><span>tokens.css</span><button class="copy-button" type="button" id="copy-tokens"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg><span data-i18n="copy">Copier</span></button></div><pre><code><span class="token-purple">:root</span> {
-  <span class="token-blue">--brand-100</span>: <span class="token-yellow">#d1ffcc</span>;
-  <span class="token-blue">--brand-500</span>: <span class="token-yellow">#00f900</span>;
-  <span class="token-blue">--brand-900</span>: <span class="token-yellow">#003100</span>;
-}</code></pre></div>
-          </div>
-          <div class="scale-visual" data-reveal>
-            <div class="scale-beam" aria-hidden="true"></div>
-            <a href="./assets/screenshots/studio-scales.webp" data-lightbox class="screenshot-frame screenshot-frame--scale"><img loading="lazy" src="./assets/screenshots/studio-scales.webp" width="1400" height="1069" alt="Générateur d'échelles OKLCH de PixNab, 11 nuances et code CSS"/></a>
-            <div class="scale-rainbow" aria-hidden="true"><i style="--c:#f1ffef"></i><i style="--c:#d1ffcc"></i><i style="--c:#adffa6"></i><i style="--c:#80ff78"></i><i style="--c:#40fe3a"></i><i style="--c:#00f900"></i><i style="--c:#00c600"></i><i style="--c:#009200"></i><i style="--c:#006000"></i><i style="--c:#003100"></i><i style="--c:#000900"></i></div>
-          </div>
-        </div>
-      </section>
-
-      <section class="section wheel-section" id="wheel" aria-labelledby="wheel-title">
-        <div class="container">
-          <div class="section-heading section-heading--center" data-reveal><span class="section-label section-label--pink">THE COLOR WHEEL</span><h2 id="wheel-title" data-i18n="wheelTitle">Color harmony, <span class="text-gradient">beautifully explored.</span></h2><p data-i18n="wheelLead">Explore hue, saturation and lightness with a native color wheel. Create intentional palettes in seconds, then save, copy or export them.</p></div>
-          <div class="wheel-gallery" data-reveal>
-            <div class="wheel-glow" aria-hidden="true"></div>
-            <a href="./assets/wheel-complementary.webp" data-lightbox class="wheel-gallery__item wheel-gallery__item--left"><img src="./assets/wheel-complementary.webp" loading="lazy" width="760" height="1097" alt="Roue chromatique de PixNab avec deux couleurs complémentaires"><span data-i18n="wheelComplementary">Complementary</span></a>
-            <a href="./assets/wheel-analogous.webp" data-lightbox class="wheel-gallery__item wheel-gallery__item--right"><img src="./assets/wheel-analogous.webp" loading="lazy" width="760" height="1106" alt="Roue chromatique de PixNab avec trois couleurs analogues"><span data-i18n="wheelAnalogous">Analogous</span></a>
-          </div>
-          <div class="harmony-strip" aria-hidden="true"><span style="--c:#c6a139"></span><span style="--c:#395ec6"></span><span style="--c:#00f900"></span><span style="--c:#99e01f"></span><span style="--c:#e0661f"></span><span style="--c:#7a35f2"></span></div>
-        </div>
-      </section>
-
-      <section class="section theory-section" id="color-theory" aria-labelledby="theory-title">
-        <div class="container">
-          <div class="theory-intro" data-reveal>
-            <div class="theory-intro__copy">
-              <span class="section-label section-label--pink" data-i18n="theoryLabel">COLOR THEORY, MADE USEFUL</span>
-              <h2 id="theory-title" data-i18n="theoryTitle">Master the wheel.<br><span class="text-gradient">Design with intent.</span></h2>
-              <p data-i18n="theoryLead">The color wheel is more than a rainbow. Its geometry reveals relationships you can use to create contrast, coherence and hierarchy in a website or interface. Here is how PixNab turns color theory into a practical workflow.</p>
-            </div>
-            <div class="theory-intro__ribbon" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
-          </div>
-
-          <div class="theory-anatomy">
-            <article class="anatomy-card" data-reveal>
-              <img src="./assets/diagrams/anatomy-hue.svg" loading="lazy" width="320" height="290" alt="Original diagram: hue changes as the marker rotates around a colorful wheel.">
-              <span class="anatomy-card__step">01 / HUE</span>
-              <h3 data-i18n="anatomyHueTitle">Hue is the angle</h3>
-              <p data-i18n="anatomyHueBody">Move around the disk to explore the color family: red, yellow, green, cyan, blue or violet. A complete turn is 360°.</p>
-            </article>
-            <article class="anatomy-card" data-reveal>
-              <img src="./assets/diagrams/anatomy-saturation.svg" loading="lazy" width="320" height="290" alt="Original diagram: saturation increases from the neutral center to the vivid edge.">
-              <span class="anatomy-card__step">02 / SATURATION</span>
-              <h3 data-i18n="anatomySatTitle">Saturation is the radius</h3>
-              <p data-i18n="anatomySatBody">Drag toward the center for muted, neutral colors; move outward for stronger saturation. Position and angle work together.</p>
-            </article>
-            <article class="anatomy-card" data-reveal>
-              <img src="./assets/diagrams/anatomy-lightness.svg" loading="lazy" width="320" height="290" alt="Original diagram: the outer lightness ring transitions from black at the top to white at the bottom.">
-              <span class="anatomy-card__step">03 / LIGHTNESS</span>
-              <h3 data-i18n="anatomyLightTitle">Lightness is the outer ring</h3>
-              <p data-i18n="anatomyLightBody">Use the narrow ring to move from HSL lightness 0% (black) to 100% (white). Inside the disk, choosing a new hue or saturation resets lightness to 50%.</p>
-            </article>
-          </div>
-          <p class="theory-note" data-i18n="anatomyNote">PixNab's wheel generates HSL color suggestions in sRGB. HSL lightness is not the same as perceived brightness, and harmonies are design suggestions—not measurements of a captured Display P3 color.</p>
-
-          <div class="theory-rgb" data-reveal>
-            <img src="./assets/diagrams/anatomy-rgb.svg" loading="lazy" width="470" height="320" alt="Original RGB wheel illustration: red, green, blue primary lights; cyan, magenta and yellow secondary colors.">
-            <div><span class="section-label section-label--cyan" data-i18n="rgbLabel">RGB, NOT PAINT</span><h3 data-i18n="rgbTitle">A wheel designed for light.</h3><p data-i18n="rgbBody">Web interfaces live on screens, which mix red, green and blue light. Their secondary colors are cyan, magenta and yellow; the intermediate hues complete the twelve-step wheel. Traditional painting wheels often start with red, yellow and blue instead. PixNab uses digital HSL/sRGB relationships.</p><div class="rgb-tags"><span>R + G → Yellow</span><span>G + B → Cyan</span><span>B + R → Magenta</span></div></div>
-          </div>
-          <div class="theory-heading" data-reveal>
-            <div>
-              <span class="section-label section-label--cyan" data-i18n="harmonyLabel">5 CLASSIC HARMONIES</span>
-              <h2 data-i18n="harmoniesTitle">One base color.<br><span class="text-gradient">Five ways to tell a story.</span></h2>
-            </div>
-            <p data-i18n="harmoniesLead">Choose a scheme based on the visual problem you are solving. Each original illustration below shows the relative angles used by PixNab, plus a practical web-design use case.</p>
-          </div>
-
-          <div class="harmony-lesson-grid">
-            <article class="harmony-lesson" data-reveal>
-              <img src="./assets/diagrams/harmony-complementary.svg" loading="lazy" width="340" height="308" alt="Original diagram showing two hues 180 degrees apart.">
-              <div class="harmony-lesson__copy"><span class="harmony-lesson__count">02 COLORS · 180°</span><h3 data-i18n="schemeComp">Complementary</h3><p data-i18n="schemeCompText">Opposites attract. Two colors facing each other create strong contrast and make primary actions stand out.</p><small data-i18n="schemeCompUse">Best for: call-to-action buttons, product highlights, hero banners.</small></div>
-            </article>
-            <article class="harmony-lesson" data-reveal>
-              <img src="./assets/diagrams/harmony-analogous.svg" loading="lazy" width="340" height="308" alt="Original diagram showing three neighboring hues about 30 degrees apart.">
-              <div class="harmony-lesson__copy"><span class="harmony-lesson__count">03 COLORS · ±30°</span><h3 data-i18n="schemeAna">Analogous</h3><p data-i18n="schemeAnaText">Neighbors feel natural together. Use one dominant shade and the other two as restrained accents.</p><small data-i18n="schemeAnaUse">Best for: serene dashboards, nature brands, editorial gradients.</small></div>
-            </article>
-            <article class="harmony-lesson" data-reveal>
-              <img src="./assets/diagrams/harmony-triadic.svg" loading="lazy" width="340" height="308" alt="Original diagram showing three hues separated by 120 degrees.">
-              <div class="harmony-lesson__copy"><span class="harmony-lesson__count">03 COLORS · 120°</span><h3 data-i18n="schemeTri">Triadic</h3><p data-i18n="schemeTriText">Three evenly spaced hues add energy without relying on a single opposite. Balance matters: do not give every color equal visual weight.</p><small data-i18n="schemeTriUse">Best for: playful products, illustrations, creative portfolios.</small></div>
-            </article>
-            <article class="harmony-lesson" data-reveal>
-              <img src="./assets/diagrams/harmony-tetradic.svg" loading="lazy" width="340" height="308" alt="Original diagram showing four hues separated by 90 degrees.">
-              <div class="harmony-lesson__copy"><span class="harmony-lesson__count">04 COLORS · 90°</span><h3 data-i18n="schemeTet">Tetradic</h3><p data-i18n="schemeTetText">Four hues create a powerful, expressive system. Let one lead; use the others sparingly for categories, states and accents.</p><small data-i18n="schemeTetUse">Best for: data visualization, creative campaigns, multi-category sites.</small></div>
-            </article>
-            <article class="harmony-lesson" data-reveal>
-              <img src="./assets/diagrams/harmony-monochromatic.svg" loading="lazy" width="340" height="308" alt="Original diagram showing one hue and two levels of HSL lightness.">
-              <div class="harmony-lesson__copy"><span class="harmony-lesson__count">02 COLORS · SAME HUE</span><h3 data-i18n="schemeMono">Monochromatic</h3><p data-i18n="schemeMonoText">Keep the hue and saturation; vary lightness. PixNab offers the selected color plus one 10-point HSL lightness variation.</p><small data-i18n="schemeMonoUse">Best for: minimalist interfaces, tonal components, low-noise layouts.</small></div>
-            </article>
-            <article class="harmony-lesson harmony-lesson--tip" data-reveal>
-              <div class="harmony-lesson__tip-visual" aria-hidden="true"><span class="tip-swatch tip-swatch--a"></span><span class="tip-swatch tip-swatch--b"></span><span class="tip-swatch tip-swatch--c"></span></div>
-              <div class="harmony-lesson__copy"><span class="harmony-lesson__count" data-i18n="schemeRuleEyebrow">DESIGN RULE OF THUMB</span><h3 data-i18n="schemeRule">Hierarchy beats quantity</h3><p data-i18n="schemeRuleText">A balanced page often feels better when a neutral background carries most of the layout, a dominant color builds identity, and accents appear only where they help.</p><small data-i18n="schemeRuleUse">Tip: check text contrast separately; a harmonious palette is not automatically accessible.</small></div>
-            </article>
-          </div>
-
-          <div class="wheel-lab" id="wheel-lab" data-reveal>
-            <div class="wheel-lab__header">
-              <div><span class="section-label section-label--orange" data-i18n="labLabel">TRY COLOR THEORY</span><h2 data-i18n="labTitle">Make a palette in seconds.</h2><p data-i18n="labLead">A small interactive illustration of the same five HSL harmony rules. Choose a base hue, saturation and lightness, then tap a swatch to copy its HEX value.</p></div>
-              <span class="wheel-lab__badge" data-i18n="labBadge">Interactive example · runs in your browser</span>
-            </div>
-            <div class="wheel-lab__body">
-              <div class="wheel-lab__visual">
-                <div class="lab-wheel" id="lab-wheel" aria-label="Illustration of a color wheel with harmony points">
-                  <div class="lab-wheel__hues"></div><div class="lab-wheel__neutral"></div><div class="lab-wheel__markers" id="lab-markers"></div>
-                </div>
-                <p class="wheel-lab__caption" data-i18n="labVisualCaption">The markers represent hue positions. Use PixNab's native wheel for actual color editing.</p>
-              </div>
-              <div class="wheel-lab__controls">
-                <label for="lab-scheme" data-i18n="labScheme">Palette type</label>
-                <select id="lab-scheme">
-                  <option value="complementary" data-i18n="schemeComp">Complementary</option>
-                  <option value="analogous" data-i18n="schemeAna">Analogous</option>
-                  <option value="triadic" data-i18n="schemeTri">Triadic</option>
-                  <option value="tetradic" data-i18n="schemeTet">Tetradic</option>
-                  <option value="monochromatic" data-i18n="schemeMono">Monochromatic</option>
-                </select>
-                <div class="lab-range"><label for="lab-hue"><span data-i18n="labHue">Hue</span><output id="lab-hue-val" for="lab-hue">25°</output></label><input type="range" id="lab-hue" min="0" max="359" value="25"></div>
-                <div class="lab-range"><label for="lab-saturation"><span data-i18n="labSat">Saturation</span><output id="lab-saturation-val" for="lab-saturation">76%</output></label><input type="range" id="lab-saturation" min="0" max="100" value="76"></div>
-                <div class="lab-range"><label for="lab-lightness"><span data-i18n="labLight">HSL lightness</span><output id="lab-lightness-val" for="lab-lightness">52%</output></label><input type="range" id="lab-lightness" min="0" max="100" value="52"></div>
-                <div class="lab-palette" id="lab-palette" aria-label="Generated palette colors"></div>
-                <p class="lab-feedback" id="lab-feedback" aria-live="polite" data-i18n="labCopyHint">Click a color swatch to copy its HEX code.</p>
-              </div>
-            </div>
-          </div>
-
-          <div class="theory-practical" data-reveal>
-            <div><span class="section-label section-label--cyan" data-i18n="practicalLabel">PUT IT TO WORK</span><h2 data-i18n="practicalTitle">From a pleasing palette to a usable interface.</h2></div>
-            <div class="practical-steps">
-              <div><span>01</span><h3 data-i18n="practical1Title">Start with one purpose</h3><p data-i18n="practical1Text">Choose your base from a brand color or a real pixel. Decide which color should attract attention and which should stay neutral.</p></div>
-              <div><span>02</span><h3 data-i18n="practical2Title">Assign clear roles</h3><p data-i18n="practical2Text">Use the base for primary actions, a neutral for backgrounds, and harmony colors for controlled accents—not every surface.</p></div>
-              <div><span>03</span><h3 data-i18n="practical3Title">Check readability</h3><p data-i18n="practical3Text">Verify text/background contrast. WCAG AA generally requires 4.5:1 for normal text and 3:1 for large text; color harmony alone cannot ensure this.</p></div>
-            </div>
-          </div>
-          <p class="theory-source"><span data-i18n="theorySource">Further reading on color theory:</span> <a href="https://www.canva.com/colors/color-wheel/" target="_blank" rel="noopener noreferrer">Canva Color Wheel ↗</a> · <a href="https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html" target="_blank" rel="noopener noreferrer">WCAG contrast ↗</a>. <span data-i18n="theoryIllustrationCredit">All diagrams on this page are original PixNab illustrations, not Canva assets.</span></p>
-        </div>
-      </section>
-
-
-      <section class="section precision-section" id="precision" aria-labelledby="precision-title">
-        <div class="container split-layout split-layout--right">
-          <div class="split-copy" data-reveal>
-            <span class="section-label section-label--orange">PRECISION PICKER</span>
-            <h2 id="precision-title" data-i18n="precisionTitle">Pick any color.<br><span class="text-gradient text-gradient--warm">Pixel-perfect precision.</span></h2>
-            <p data-i18n="precisionText">Du plumage écarlate aux reflets bleus, trouve exactement la couleur que tu cherches. La loupe agrandit la zone réellement visée, sans approximation.</p>
-            <ul class="check-list check-list--orange"><li data-i18n="precisionBullet1">Loupe précise, jusqu'au pixel</li><li data-i18n="precisionBullet2">Capture de couleurs à l'écran</li><li data-i18n="precisionBullet3">Copie et historique immédiats</li></ul>
-            <span class="subtle-caption" data-i18n="precisionHint">Astuce : déplace la souris sur le perroquet pour explorer ses couleurs.</span>
-          </div>
-          <div class="precision-product" data-reveal>
-            <div class="precision-product__glow" aria-hidden="true"></div>
-            <figure class="precision-product__frame">
-              <img src="./assets/screenshots/precision-loupe.webp" width="724" height="663" loading="lazy" alt="Actual PixNab blue circular magnifier with pixel grid, central sampling reticle and CSS Hex value panel.">
-              <figcaption data-i18n="precisionScreenshot">Actual PixNab macOS magnifier</figcaption>
-            </figure>
-          </div>
-        </div>
-      </section>
-
-      <section class="section formats-section" id="formats" aria-labelledby="formats-title">
-        <div class="container split-layout split-layout--left">
-          <div class="split-copy" data-reveal><span class="section-label section-label--cyan">FROM PIXEL TO CODE</span><h2 id="formats-title" data-i18n="formatsTitle">From pixel to code.<br><span class="text-gradient">Every format.</span></h2><p data-i18n="formatsText">Récupère la bonne valeur en HEX, RGB, HSL, OKLCH, CSS ou Swift. Garde ton historique à portée de main et exporte tes palettes vers tes outils préférés.</p><div class="format-tags"><span>HEX</span><span>RGB</span><span>HSL</span><span>OKLCH</span><span>Display P3</span><span>SwiftUI</span><span>ASE / ACO</span></div></div>
-          <div class="formats-visual" data-reveal><div class="formats-glow" aria-hidden="true"></div><a data-lightbox href="./assets/screenshots/colors-formats.webp" class="screenshot-frame screenshot-frame--formats"><img loading="lazy" src="./assets/screenshots/colors-formats.webp" width="1100" height="986" alt="Fenêtre Couleurs et formats de PixNab affichant l'historique des couleurs et plusieurs formats de sortie"></a><a data-lightbox href="./assets/screenshots/rgba-editor.webp" class="screenshot-frame screenshot-frame--editor"><img loading="lazy" src="./assets/screenshots/rgba-editor.webp" width="590" height="551" alt="Éditeur RGBA de PixNab avec curseurs rouge, vert, bleu et alpha"></a></div>
-        </div>
-      </section>
-
-
-<section class="section screenshot-suite" id="screenshots" aria-labelledby="screenshots-title">
-  <div class="container">
-    <div class="section-heading section-heading--center" data-reveal>
-      <span class="section-label section-label--cyan" data-i18n="screenLabel">THE REAL APP</span>
-      <h2 id="screenshots-title" data-i18n="screenTitle">Every tool. <span class="text-gradient">The real PixNab.</span></h2>
-      <p data-i18n="screenLead">Explore the actual interface: all 12 new screenshots, from Color Studio to the native editor, precision magnifier and preferences. No fake app windows.</p>
-    </div>
-    <div class="screen-filter" role="group" aria-label="Filter application screenshots">
-      <button type="button" class="screen-filter__button is-selected" data-filter="all" aria-pressed="true" data-i18n="screenAll">All screenshots</button>
-      <button type="button" class="screen-filter__button" data-filter="color-studio" aria-pressed="false">Color Studio</button>
-      <button type="button" class="screen-filter__button" data-filter="utilities" aria-pressed="false" data-i18n="screenTools">Everyday tools</button>
-      <button type="button" class="screen-filter__button" data-filter="preferences" aria-pressed="false" data-i18n="screenPrefs">Preferences</button>
-    </div>
-    <div class="screen-grid" id="screen-grid"><a class="screen-card screen-card--featured" data-lightbox data-screen-group="color-studio" href="./assets/screenshots/studio-discover.webp" aria-label="Enlarge Discover palettes">
-      <div class="screen-card__visual"><img src="./assets/screenshots/studio-discover.webp" loading="eager" decoding="async" alt="Actual PixNab screenshot: Discover palettes" /></div>
-      <div class="screen-card__info"><span><strong data-i18n="shotTitle_studio-discover">Discover palettes</strong><small data-i18n="shotDesc_studio-discover">300 web-ready palettes, use cases and a live site preview.</small></span><span class="screen-card__arrow" aria-hidden="true">↗</span></div>
-    </a><a class="screen-card" data-lightbox data-screen-group="color-studio" href="./assets/screenshots/studio-my-palettes.webp" aria-label="Enlarge My palettes">
-      <div class="screen-card__visual"><img src="./assets/screenshots/studio-my-palettes.webp" loading="eager" decoding="async" alt="Actual PixNab screenshot: My palettes" /></div>
-      <div class="screen-card__info"><span><strong data-i18n="shotTitle_studio-my-palettes">My palettes</strong><small data-i18n="shotDesc_studio-my-palettes">Create and organize named palettes with editable roles and export.</small></span><span class="screen-card__arrow" aria-hidden="true">↗</span></div>
-    </a><a class="screen-card" data-lightbox data-screen-group="color-studio" href="./assets/screenshots/studio-scales.webp" aria-label="Enlarge OKLCH scales">
-      <div class="screen-card__visual"><img src="./assets/screenshots/studio-scales.webp" loading="eager" decoding="async" alt="Actual PixNab screenshot: OKLCH scales" /></div>
-      <div class="screen-card__info"><span><strong data-i18n="shotTitle_studio-scales">OKLCH scales</strong><small data-i18n="shotDesc_studio-scales">Eleven harmonized shades with design-token export.</small></span><span class="screen-card__arrow" aria-hidden="true">↗</span></div>
-    </a><a class="screen-card" data-lightbox data-screen-group="color-studio" href="./assets/screenshots/studio-compare.webp" aria-label="Enlarge Compare colors">
-      <div class="screen-card__visual"><img src="./assets/screenshots/studio-compare.webp" loading="eager" decoding="async" alt="Actual PixNab screenshot: Compare colors" /></div>
-      <div class="screen-card__info"><span><strong data-i18n="shotTitle_studio-compare">Compare colors</strong><small data-i18n="shotDesc_studio-compare">Independent color A/B comparison with ΔE00 and OKLab distance.</small></span><span class="screen-card__arrow" aria-hidden="true">↗</span></div>
-    </a><a class="screen-card" data-lightbox data-screen-group="utilities" href="./assets/screenshots/colors-formats.webp" aria-label="Enlarge Colors & formats">
-      <div class="screen-card__visual"><img src="./assets/screenshots/colors-formats.webp" loading="eager" decoding="async" alt="Actual PixNab screenshot: Colors &amp; formats" /></div>
-      <div class="screen-card__info"><span><strong data-i18n="shotTitle_colors-formats">Colors &amp; formats</strong><small data-i18n="shotDesc_colors-formats">33 formats, color history, favorites and one-click copy.</small></span><span class="screen-card__arrow" aria-hidden="true">↗</span></div>
-    </a><a class="screen-card" data-lightbox data-screen-group="utilities" href="./assets/screenshots/rgba-editor.webp" aria-label="Enlarge RGBA color editor">
-      <div class="screen-card__visual"><img src="./assets/screenshots/rgba-editor.webp" loading="eager" decoding="async" alt="Actual PixNab screenshot: RGBA color editor" /></div>
-      <div class="screen-card__info"><span><strong data-i18n="shotTitle_rgba-editor">RGBA color editor</strong><small data-i18n="shotDesc_rgba-editor">Native RGB channel sliders and alpha control.</small></span><span class="screen-card__arrow" aria-hidden="true">↗</span></div>
-    </a><a class="screen-card" data-lightbox data-screen-group="utilities" href="./assets/screenshots/precision-loupe.webp" aria-label="Enlarge Pixel magnifier">
-      <div class="screen-card__visual"><img src="./assets/screenshots/precision-loupe.webp" loading="eager" decoding="async" alt="Actual PixNab screenshot: Pixel magnifier" /></div>
-      <div class="screen-card__info"><span><strong data-i18n="shotTitle_precision-loupe">Pixel magnifier</strong><small data-i18n="shotDesc_precision-loupe">Actual precision picker with pixel grid and center reticle.</small></span><span class="screen-card__arrow" aria-hidden="true">↗</span></div>
-    </a><a class="screen-card" data-lightbox data-screen-group="utilities" href="./assets/screenshots/menu-bar.webp" aria-label="Enlarge Menu bar">
-      <div class="screen-card__visual"><img src="./assets/screenshots/menu-bar.webp" loading="eager" decoding="async" alt="Actual PixNab screenshot: Menu bar" /></div>
-      <div class="screen-card__info"><span><strong data-i18n="shotTitle_menu-bar">Menu bar</strong><small data-i18n="shotDesc_menu-bar">Fast access to pick, color wheel, formats and saved colors.</small></span><span class="screen-card__arrow" aria-hidden="true">↗</span></div>
-    </a><a class="screen-card" data-lightbox data-screen-group="utilities" href="./assets/screenshots/macos-color-panel.webp" aria-label="Enlarge macOS color panel">
-      <div class="screen-card__visual"><img src="./assets/screenshots/macos-color-panel.webp" loading="eager" decoding="async" alt="Actual PixNab screenshot: macOS color panel" /></div>
-      <div class="screen-card__info"><span><strong data-i18n="shotTitle_macos-color-panel">macOS color panel</strong><small data-i18n="shotDesc_macos-color-panel">Built-in system color panel remains within reach.</small></span><span class="screen-card__arrow" aria-hidden="true">↗</span></div>
-    </a><a class="screen-card" data-lightbox data-screen-group="preferences" href="./assets/screenshots/preferences-general.webp" aria-label="Enlarge General preferences">
-      <div class="screen-card__visual"><img src="./assets/screenshots/preferences-general.webp" loading="eager" decoding="async" alt="Actual PixNab screenshot: General preferences" /></div>
-      <div class="screen-card__info"><span><strong data-i18n="shotTitle_preferences-general">General preferences</strong><small data-i18n="shotDesc_preferences-general">Picking and application settings.</small></span><span class="screen-card__arrow" aria-hidden="true">↗</span></div>
-    </a><a class="screen-card" data-lightbox data-screen-group="preferences" href="./assets/screenshots/preferences-appearance.webp" aria-label="Enlarge Appearance preferences">
-      <div class="screen-card__visual"><img src="./assets/screenshots/preferences-appearance.webp" loading="eager" decoding="async" alt="Actual PixNab screenshot: Appearance preferences" /></div>
-      <div class="screen-card__info"><span><strong data-i18n="shotTitle_preferences-appearance">Appearance preferences</strong><small data-i18n="shotDesc_preferences-appearance">Look and feel choices for native macOS.</small></span><span class="screen-card__arrow" aria-hidden="true">↗</span></div>
-    </a><a class="screen-card" data-lightbox data-screen-group="preferences" href="./assets/screenshots/preferences-code-style.webp" aria-label="Enlarge Code-style preferences">
-      <div class="screen-card__visual"><img src="./assets/screenshots/preferences-code-style.webp" loading="eager" decoding="async" alt="Actual PixNab screenshot: Code-style preferences" /></div>
-      <div class="screen-card__info"><span><strong data-i18n="shotTitle_preferences-code-style">Code-style preferences</strong><small data-i18n="shotDesc_preferences-code-style">Configure how output formats are generated.</small></span><span class="screen-card__arrow" aria-hidden="true">↗</span></div>
-    </a></div>
-    <p class="screenshot-footnote" data-i18n="screensNote">All screenshots were supplied from PixNab on macOS. Click any image to view it in full.</p>
+<main>
+ <section class="hero" aria-labelledby="hero-title">
+  <div class="hero-aura hero-aura-blue"></div><div class="hero-aura hero-aura-magenta"></div>
+  <svg class="hero-ribbon" viewBox="0 0 1400 720" aria-hidden="true" preserveAspectRatio="none"><defs><linearGradient id="ribbon-grad" x1="0" y1="1" x2="1" y2="0"><stop stop-color="#05e1eb"/><stop offset=".33" stop-color="#357cff"/><stop offset=".7" stop-color="#cc30fa"/><stop offset="1" stop-color="#ff4cce"/></linearGradient></defs><path d="M-150 360 Q150 790 500 600 T1100 210 T1540 -80" fill="none" stroke="url(#ribbon-grad)" stroke-width="128" opacity=".35"/><path d="M-150 350 Q150 780 510 600 T1110 220 T1530 -90" fill="none" stroke="url(#ribbon-grad)" stroke-width="7" opacity=".65"/></svg>
+  <div class="hero-inner container"><div class="hero-copy">
+   <div class="eyebrow rainbow-eyebrow">PIXNAB <span data-i18n="forMac">FOR macOS</span></div>
+   <h1 id="hero-title" data-i18n-html="heroTitle">The premium<br>color picker<br><span class="gradient-text">for macOS.</span></h1>
+   <p class="hero-lede" data-i18n="heroDescription">A powerful, native Mac color picker and color studio for designers and developers. Pick, explore, create palettes, compare colors, and export in any format.</p>
+   <div class="hero-actions"><a class="button button-primary" href="https://github.com/Panda-Softs/PixNab/releases" target="_blank" rel="noopener noreferrer"><svg><use href="#i-download"/></svg><span data-i18n="download">Download for macOS</span></a><a class="button button-ghost" href="#studio"><svg><use href="#i-arrow"/></svg><span data-i18n="seeStudio">Explore Color Studio</span></a></div>
+   <div class="hero-trust"><span><b>⌘</b><span data-i18n="native">Native macOS</span></span><span><b>ϟ</b><span data-i18n="fast">Powerful & fast</span></span><span><svg><use href="#i-layers"/></svg><span data-i18n="designers">For designers & developers</span></span></div>
   </div>
-</section>
+  <div class="hero-art" id="hero-art" tabindex="0" role="group" aria-label="Interactive pixel magnifier on a colorful macaw. Move the pointer or use arrow keys. Press Enter to copy the hex color.">
+    <div class="hero-parrot-halo"></div><img id="macaw-image" class="hero-parrot" src="./assets/macaw-cutout.webp" width="1234" height="955" alt="A vividly colored macaw with green and cyan crown, golden feathers and blue wings" fetchpriority="high" decoding="async">
+    <div id="pixel-lens" class="pixel-lens" aria-hidden="true"><canvas id="lens-canvas" width="256" height="256"></canvas><div class="lens-crosshair"></div><div class="lens-readout"><span class="lens-chip" id="lens-chip"></span><div><small>PRECISION · CSS Hex</small><strong id="lens-hex">#f7c51d</strong></div></div><div class="lens-tip"></div></div>
+  </div></div>
+ </section>
 
-      <section class="final-cta" aria-labelledby="cta-title"><div class="cta-wave cta-wave--blue" aria-hidden="true"></div><div class="cta-wave cta-wave--pink" aria-hidden="true"></div><div class="container final-cta__content" data-reveal><span class="section-label">PIXNAB FOR macOS</span><h2 id="cta-title" data-i18n="ctaTitle">Make every color<br>feel extraordinary.</h2><p data-i18n="ctaText">Un outil natif, précis et pensé pour les designers, développeurs et amoureux des couleurs.</p><div class="final-cta__actions"><a class="button button--vibrant button--large" href="https://github.com/Panda-Softs/PixNab" target="_blank" rel="noopener noreferrer"><span data-i18n="ctaPrimary">Voir le projet sur GitHub</span><span aria-hidden="true">↗</span></a><a class="button button--outline button--large" href="https://github.com/Panda-Softs/PixNab/releases" target="_blank" rel="noopener noreferrer"><span data-i18n="ctaSecondary">Consulter les versions</span></a></div><small data-i18n="ctaNote">Les fichiers d'installation publics seront proposés via GitHub Releases lorsqu'ils seront disponibles.</small></div></section>
-    </main>
+ <section class="feature-rail container" id="features" aria-label="PixNab main features">
+  <a href="#precision" class="feature-card card-cyan"><svg><use href="#i-target"/></svg><h2 data-i18n="featurePrecision">Precision Picker</h2><p data-i18n="featurePrecisionText">Pixel-perfect sampling with magnifier and arrow-key control.</p></a>
+  <a href="#wheel" class="feature-card card-blue"><div class="mini-wheel" aria-hidden="true"></div><h2>Color Wheel</h2><p data-i18n="featureWheelText">Explore color harmony and create beautiful combinations.</p></a>
+  <a href="#studio" class="feature-card card-purple"><svg><use href="#i-layers"/></svg><h2>Color Studio</h2><p data-i18n="featureStudioText">Discover, build and manage palettes, scales and tokens.</p></a>
+  <a href="#formats" class="feature-card card-pink"><svg><use href="#i-code"/></svg><h2 data-i18n="formatsCount">33+ Formats</h2><p data-i18n="featureFormatsText">Work with HEX, RGB(A), HSL(A), OKLCH, Lab, CSS, JSON and more.</p></a>
+ </section>
 
-    <footer class="site-footer"><div class="container footer-inner"><a class="brand brand--footer" href="#top"><img src="./assets/pixnab-app-icon.png" alt="" width="30" height="30"><span>PixNab<span class="brand-dot">.</span></span></a><span data-i18n="footerMade">Conçu avec soin pour macOS.</span><div class="footer-links"><a href="https://github.com/Panda-Softs/PixNab" target="_blank" rel="noopener noreferrer">GitHub</a><a href="https://github.com/Panda-Softs/PixNab/issues" target="_blank" rel="noopener noreferrer">Issues</a><a href="https://github.com/Panda-Softs/PixNab/releases" target="_blank" rel="noopener noreferrer">Releases</a><a href="#top" data-i18n="backToTop">En haut ↑</a></div></div></footer>
+ <section id="studio" class="studio-section section container"><div class="studio-copy"><p class="kicker">COLOR <span>STUDIO</span></p><h2 data-i18n-html="studioTitle">Your complete<br>color workspace.</h2><p data-i18n="studioBody">A powerful studio to explore curated palettes, build your own, generate color scales, compare colors, and export design tokens.</p><ul class="checklist"><li data-i18n="studio1">Discover 300 curated web palettes</li><li data-i18n="studio2">Create and manage your own palettes</li><li data-i18n="studio3">Generate perceptual OKLCH color scales</li><li data-i18n="studio4">Compare two colors with ΔE00 and OKLab</li><li data-i18n="studio5">Export to CSS, JSON, SwiftUI and more</li></ul></div>
+  <div class="studio-shot glow-shot"><img src="./assets/screenshots/studio-discover.webp" width="1408" height="1080" loading="eager" alt="Actual PixNab Color Studio window showing Harbor SaaS palette, 300 presets and a website preview"><div class="shot-shadow"></div></div></section>
+
+ <section id="wheel" class="wheel-section"><div class="container wheel-layout">
+  <div class="wheel-copy"><p class="kicker">COLOR <span>WHEEL</span></p><h2 data-i18n-html="wheelTitle">Understand, explore,<br>and create color harmony.</h2><p data-i18n="wheelBody">An interactive color wheel makes color relationships simple. Find complementary, analogous, triadic and tetradic harmonies, then use your palette in PixNab.</p><ul class="checklist"><li data-i18n="wheel1">Visualize color harmony in real time</li><li data-i18n="wheel2">Explore complementary, analogous, triadic and tetradic schemes</li><li data-i18n="wheel3">Choose a base color and get matching colors</li><li data-i18n="wheel4">Send colors to Color Studio</li></ul>
+   <div class="harmony-demo"><div class="wheel-dial" id="interactive-wheel" role="slider" aria-label="Hue" tabindex="0" aria-valuemin="0" aria-valuemax="359" aria-valuenow="39"><div class="dial-center">Color<br>Wheel</div><i class="wheel-dot dot-a"></i><i class="wheel-dot dot-b"></i><i class="wheel-dot dot-c"></i></div><div class="swatch-demo"><label for="harmony-select" data-i18n="demoTitle">Try the color harmonies</label><select id="harmony-select" aria-label="Harmony type"><option value="triadic">Triadic</option><option value="complementary">Complementary</option><option value="analogous">Analogous</option><option value="tetradic">Tetradic</option><option value="monochromatic">Monochromatic</option></select><div class="live-swatches" id="live-swatches" aria-live="polite"></div><p class="small-note" data-i18n="copyColorHint">Select a color to copy its HEX value.</p></div></div>
   </div>
+  <div class="macos-picker"><img src="./assets/screenshots/macos-color-panel.webp" loading="eager" width="522" height="830" alt="Actual Apple macOS color picker with crayon swatches"/></div>
+  <div class="harmonies"><div class="harmony-tile"><div class="harmony-pict h-complement"><i></i><i></i></div><div><strong data-i18n="comp">Complementary</strong><p data-i18n="compDesc">Opposite hues, strong contrast.</p></div></div><div class="harmony-tile"><div class="harmony-pict h-analog"><i></i><i></i><i></i></div><div><strong data-i18n="ana">Analogous</strong><p data-i18n="anaDesc">Neighboring hues, gentle balance.</p></div></div><div class="harmony-tile"><div class="harmony-pict h-triad"><i></i><i></i><i></i></div><div><strong data-i18n="tri">Triadic</strong><p data-i18n="triDesc">Three hues evenly spaced.</p></div></div><div class="harmony-tile"><div class="harmony-pict h-tetra"><i></i><i></i><i></i><i></i></div><div><strong data-i18n="tetra">Tetradic</strong><p data-i18n="tetraDesc">Two complementary pairs.</p></div></div></div>
+ </div><div class="container theory-row"><details class="theory-details"><summary><span><svg><use href="#i-arrow"/></svg> <span data-i18n="theoryExpand">Learn how the color wheel works — hue, saturation and lightness</span></span><b>+</b></summary><div class="theory-content"><div class="theory-intro"><h3 data-i18n="theoryHeading">Understand color, not just color codes.</h3><p data-i18n="theoryIntro">Hue identifies the position on the wheel (0–360°). Saturation describes color intensity. HSL lightness spans from black (0%) through color (50%) to white (100%). HSL lightness is not perceptual brightness.</p></div><div class="theory-grid"><figure><img src="./assets/diagrams/anatomy-hue.svg" alt="Hue angle, 0 to 360 degrees" loading="eager"><figcaption data-i18n="hue">Hue — position on the circle</figcaption></figure><figure><img src="./assets/diagrams/anatomy-saturation.svg" alt="Saturation increases radially" loading="eager"><figcaption data-i18n="sat">Saturation — intensity of color</figcaption></figure><figure><img src="./assets/diagrams/anatomy-lightness.svg" alt="HSL lightness from black to white" loading="eager"><figcaption data-i18n="light">Lightness — black to white</figcaption></figure><figure><img src="./assets/diagrams/anatomy-rgb.svg" alt="RGB additive color wheel" loading="eager"><figcaption>RGB — <span data-i18n="rgb">additive color mixing</span></figcaption></figure><figure><img src="./assets/diagrams/harmony-complementary.svg" alt="Complementary harmony" loading="eager"><figcaption data-i18n="comp">Complementary</figcaption></figure><figure><img src="./assets/diagrams/harmony-analogous.svg" alt="Analogous harmony" loading="eager"><figcaption data-i18n="ana">Analogous</figcaption></figure><figure><img src="./assets/diagrams/harmony-triadic.svg" alt="Triadic harmony" loading="eager"><figcaption data-i18n="tri">Triadic</figcaption></figure><figure><img src="./assets/diagrams/harmony-tetradic.svg" alt="Tetradic harmony" loading="eager"><figcaption data-i18n="tetra">Tetradic</figcaption></figure><figure><img src="./assets/diagrams/harmony-monochromatic.svg" alt="Monochromatic harmony" loading="eager"><figcaption data-i18n="mono">Monochromatic</figcaption></figure></div><p class="theory-footer" data-i18n="theoryFooter">Practical tip: pick a dominant color, use one accent color, and verify text contrast against its background. In PixNab, OKLCH scales can help create ordered design tokens.</p></div></details></div></section>
 
-  <dialog class="image-dialog" id="image-dialog" aria-label="Capture d'écran agrandie"><form method="dialog"><button class="image-dialog__close" type="submit" aria-label="Fermer l'image">×</button></form><img id="image-dialog-img" alt=""><span class="image-dialog__tip" data-i18n="dialogTip">Échap pour fermer</span></dialog>
-  <div class="sr-only" id="live-status" role="status" aria-live="polite"></div>
+ <section class="precision-section container" id="precision"><div class="precision-card"><div class="precision-visual"><img src="./assets/macaw-cutout.webp" alt="Detail of vivid macaw feathers" loading="eager"><img class="precision-loupe-img" src="./assets/precision-loupe-cutout.webp" alt="Authentic PixNab circular precision magnifier showing sampled CSS HEX and pixel grid" loading="eager"></div><div class="precision-copy"><p class="kicker">PRECISION <span>PICKER</span></p><h2 data-i18n="precisionTitle">Pixel-perfect color sampling.</h2><p data-i18n="precisionBody">Zoom in, pick the exact pixel you need, and work with confidence. Use arrow keys for fine control and copy or export in your preferred format.</p><div class="precision-specs"><span><svg><use href="#i-target"/></svg><span data-i18n="pixelAccurate">Pixel-accurate magnifier</span></span><span><b>▣</b><span data-i18n="arrowControl">Arrow-key precision</span></span><span><svg><use href="#i-copy"/></svg><span data-i18n="copyAny">Copy in any format</span></span></div></div></div></section>
+
+ <section class="tools-section container" id="formats"><p class="kicker">MORE POWERFUL <span>TOOLS</span></p><h2 data-i18n="toolsTitle">Everything you need to work with color.</h2><div class="tools-grid">
+ <article class="tool-card"><div class="tool-image"><img src="./assets/screenshots/colors-formats.webp" loading="eager" alt="Actual PixNab Colors & Formats window with HEX, RGB and favorite formats"></div><h3><svg><use href="#i-code"/></svg><span data-i18n="toolFormats">Colors & Formats</span></h3><p data-i18n="toolFormatsBody">Edit colors, manage your history, and copy in 33 formats.</p></article>
+ <article class="tool-card"><div class="tool-image"><img src="./assets/screenshots/studio-scales.webp" loading="eager" alt="Actual PixNab OKLCH color scales and CSS tokens"></div><h3><svg><use href="#i-layers"/></svg><span data-i18n="toolScales">Color Scales & Tokens</span></h3><p data-i18n="toolScalesBody">Generate perceptual scales and export design tokens.</p></article>
+ <article class="tool-card"><div class="tool-image"><img src="./assets/screenshots/studio-compare.webp" loading="eager" alt="Actual PixNab A/B color comparison and Delta E 2000"></div><h3><svg><use href="#i-scale"/></svg><span data-i18n="toolCompare">Color Comparison</span></h3><p data-i18n="toolCompareBody">Compare two colors using ΔE00 and OKLab.</p></article>
+ <article class="tool-card"><div class="tool-image"><img src="./assets/screenshots/menu-bar.webp" loading="eager" alt="PixNab menu bar icon and color actions"></div><h3><svg><use href="#i-monitor"/></svg><span data-i18n="toolMenu">Menu Bar Picker</span></h3><p data-i18n="toolMenuBody">Pick colors anywhere using the convenient menu bar.</p></article>
+ </div></section>
+
+ <section class="screens-section container" id="screenshots"><div class="screens-intro"><div><p class="kicker">REAL APP <span>SCREENSHOTS</span></p><h2 data-i18n="galleryTitle">Discover every side of PixNab.</h2><p data-i18n="galleryText">The real app, not mockups. Explore all 12 current screenshots plus the native Color Wheel views.</p></div><button id="gallery-toggle" class="button button-ghost" type="button" aria-expanded="false" aria-controls="gallery-panel"><span data-i18n="galleryOpen">View all screenshots</span><svg><use href="#i-arrow"/></svg></button></div>
+  <div class="gallery-peek" aria-hidden="true"><img src="./assets/screenshots/studio-my-palettes.webp" alt="" loading="eager"><img src="./assets/screenshots/rgba-editor.webp" alt="" loading="eager"><img src="./assets/wheel-complementary.webp" alt="" loading="eager"></div>
+  <div id="gallery-panel" class="gallery-panel" hidden><div class="gallery-controls" role="group" aria-label="Screenshot filters"><button class="filter active" data-filter="all" type="button" aria-pressed="true" data-i18n="filterAll">All</button><button class="filter" data-filter="studio" type="button" aria-pressed="false">Color Studio</button><button class="filter" data-filter="tools" type="button" aria-pressed="false" data-i18n="filterTools">Tools</button><button class="filter" data-filter="preferences" type="button" aria-pressed="false" data-i18n="filterPreferences">Preferences</button></div><div class="gallery-grid">
+    <button class="gallery-item" data-category="studio" type="button"><img src="./assets/screenshots/studio-discover.webp" loading="eager" alt="Color Studio: discover 300 palettes"><span>Discover palettes</span></button>
+    <button class="gallery-item" data-category="studio" type="button"><img src="./assets/screenshots/studio-my-palettes.webp" loading="eager" alt="Color Studio: manage saved palettes"><span>My palettes</span></button>
+    <button class="gallery-item" data-category="studio" type="button"><img src="./assets/screenshots/studio-scales.webp" loading="eager" alt="OKLCH color scales"><span>OKLCH scales</span></button>
+    <button class="gallery-item" data-category="studio" type="button"><img src="./assets/screenshots/studio-compare.webp" loading="eager" alt="Compare colors in Color Studio"><span>Compare colors</span></button>
+    <button class="gallery-item" data-category="tools" type="button"><img src="./assets/screenshots/colors-formats.webp" loading="eager" alt="Colors and formats"><span>Colors & formats</span></button>
+    <button class="gallery-item" data-category="tools" type="button"><img src="./assets/screenshots/rgba-editor.webp" loading="eager" alt="RGBA editor"><span>RGBA editor</span></button>
+    <button class="gallery-item" data-category="tools" type="button"><img src="./assets/screenshots/macos-color-panel.webp" loading="eager" alt="macOS color panel"><span>macOS color panel</span></button>
+    <button class="gallery-item" data-category="tools" type="button"><img src="./assets/screenshots/precision-loupe.webp" loading="eager" alt="Magnifier"><span>Pixel magnifier</span></button>
+    <button class="gallery-item" data-category="tools" type="button"><img src="./assets/screenshots/menu-bar.webp" loading="eager" alt="Menu bar app"><span>Menu bar</span></button>
+    <button class="gallery-item" data-category="preferences" type="button"><img src="./assets/screenshots/preferences-general.webp" loading="eager" alt="PixNab general preferences"><span>General preferences</span></button>
+    <button class="gallery-item" data-category="preferences" type="button"><img src="./assets/screenshots/preferences-appearance.webp" loading="eager" alt="PixNab appearance preferences"><span>Appearance preferences</span></button>
+    <button class="gallery-item" data-category="preferences" type="button"><img src="./assets/screenshots/preferences-code-style.webp" loading="eager" alt="PixNab code style preferences"><span>Code style preferences</span></button>
+    <button class="gallery-item" data-category="tools" type="button"><img src="./assets/wheel-complementary.webp" loading="eager" alt="PixNab Color Wheel complementary scheme"><span>Color Wheel — complementary</span></button>
+    <button class="gallery-item" data-category="tools" type="button"><img src="./assets/wheel-analogous.webp" loading="eager" alt="PixNab Color Wheel analogous scheme"><span>Color Wheel — analogous</span></button>
+   </div></div></section>
+
+ <section class="cta-section container"><div class="cta-card"><div class="cta-icon"><img src="./assets/pixnab-app-icon.png" alt="PixNab application icon" width="106" height="106"></div><div class="cta-copy"><h2 data-i18n-html="ctaTitle">Ready to elevate your <span class="gradient-text">color workflow?</span></h2><p data-i18n="ctaBody">Download PixNab and get a powerful, beautiful, native macOS color picker and color studio.</p></div><div class="cta-actions"><a class="button button-primary" href="https://github.com/Panda-Softs/PixNab/releases" target="_blank" rel="noopener noreferrer"><svg><use href="#i-download"/></svg><span data-i18n="download">Download for macOS</span></a><a href="https://github.com/Panda-Softs/PixNab" target="_blank" rel="noopener noreferrer" class="cta-sub"><svg><use href="#i-github"/></svg><span data-i18n="openSource">Open source on GitHub</span></a></div></div></section>
+</main>
+<footer class="site-footer container"><a class="footer-brand" href="#top"><img src="./assets/favicon-32.png" alt="" width="24" height="24"> PixNab</a><span data-i18n="footer">Made for the macOS creative workflow.</span><a href="https://github.com/Panda-Softs/PixNab" target="_blank" rel="noopener noreferrer">GitHub</a></footer>
+</div>
+<dialog id="shot-dialog" class="shot-dialog" aria-label="Screenshot preview"><div class="dialog-top"><span id="dialog-caption"></span><button type="button" id="dialog-close" aria-label="Close preview">×</button></div><img id="dialog-image" alt=""></dialog>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
 </body>
 </html>
