@@ -69,7 +69,13 @@ final class AppController: NSObject, ObservableObject, NSMenuDelegate, NSWindowD
         overlay.onCopyImage = { [weak self] in self?.copyLensImage() }
         overlay.onPrecisionChanged = { [weak self] in self?.render() }
         capture.onFrame = { [weak self] buffer in
-            guard let self, self.picking else { return }
+            guard let self, self.picking,
+                  let screenID = self.currentScreenID,
+                  let streamID = self.capture.displayID,
+                  screenID.uint32Value == streamID,
+                  self.pendingDisplayID == nil else { return }
+            // A late frame from a previously selected monitor must never be
+            // shown or committed after the cursor crosses the display seam.
             self.frame = buffer
             self.frameRevision &+= 1
             self.render()
@@ -328,14 +334,6 @@ final class AppController: NSObject, ObservableObject, NSMenuDelegate, NSWindowD
         // Arrow-key offsets are physical pixels relative to the screen under
         // the real pointer. Carrying them to a screen with another scaling
         // factor would sample the wrong physical pixel.
-        let pointer = NSEvent.mouseLocation
-        if let screen = NSScreen.screens.first(where: { $0.frame.contains(pointer) }),
-           let id = screen.deviceDescription[NSDeviceDescriptionKey("NSScreenNumber")] as? NSNumber,
-           id != pointerScreenID {
-            keyOffsetX = 0
-            keyOffsetY = 0
-            pointerScreenID = id
-        }
         let location = NSEvent.mouseLocation
         guard let screen = NSScreen.screens.first(where: { $0.frame.contains(location) }),
               let number = screen.deviceDescription[NSDeviceDescriptionKey("NSScreenNumber")] as? NSNumber else {
@@ -346,6 +344,17 @@ final class AppController: NSObject, ObservableObject, NSMenuDelegate, NSWindowD
             overlay.clearPreview()
             return
         }
+        // Resolve the cursor position and display once per tick. Using two
+        // mouse-location snapshots could disagree while crossing the seam.
+        if number != pointerScreenID {
+            keyOffsetX = 0
+            keyOffsetY = 0
+            pointerScreenID = number
+        }
+        // Move the VISUAL lens immediately, even while ScreenCaptureKit is
+        // asynchronously starting on the newly entered monitor. The separate
+        // click-through lens panel crosses the display seam without jumping.
+        overlay.followPointer(location, on: screen, diameter: lensDiameter)
         if number != currentScreenID && number != pendingDisplayID {
             pendingDisplayID = number
             frame = nil; currentSample = nil; lastRenderKey = nil
@@ -401,7 +410,7 @@ final class AppController: NSObject, ObservableObject, NSMenuDelegate, NSWindowD
         lastRenderKey = renderKey
         let value = ColorFormatter.format(sample.color, as: chosenFormat,
                                          options: store.preferences.formatting, sourceP3: sample.sourceP3)
-        overlay.update(sample, location: NSPoint(x: center.x, y: center.y),
+        overlay.update(sample, location: NSPoint(x: center.x, y: center.y), on: screen,
                        format: chosenFormat, value: value,
                        showLabel: store.preferences.showColorLabel, diameter: lensDiameter,
                        pickedCount: activePickSession.count)
@@ -449,7 +458,22 @@ final class AppController: NSObject, ObservableObject, NSMenuDelegate, NSWindowD
     /// session, one formatted value per line. Option+click opens Formats for the
     /// last color, while the full session remains available in the menu.
     private func confirmPick(action: PickAction) {
-        guard let sample = currentSample else { return }
+        // A click may arrive before the stream starts on the new monitor.
+        // Never commit a stale sample from the old screen.
+        tick()
+        guard let pointerScreen = NSScreen.screens.first(where: { $0.frame.contains(NSEvent.mouseLocation) }),
+              let id = pointerScreen.deviceDescription[NSDeviceDescriptionKey("NSScreenNumber")] as? NSNumber,
+              id == currentScreenID,
+              let buffer = frame,
+              let cursorPixel = DisplayGeometry.pixel(at: NSEvent.mouseLocation, on: pointerScreen,
+                                                       pixelWidth: CVPixelBufferGetWidth(buffer),
+                                                       pixelHeight: CVPixelBufferGetHeight(buffer)),
+              let selectedPixel = PixelNavigation.moved(cursorPixel, dx: keyOffsetX,
+                                                       dy: keyOffsetY,
+                                                       width: CVPixelBufferGetWidth(buffer),
+                                                       height: CVPixelBufferGetHeight(buffer)),
+              lastRenderKey?.pixel == selectedPixel,
+              let sample = currentSample else { return }
         let color = sample.color
         activePickSession.append(color, sourceP3: sample.sourceP3)
         store.add(color, displayProfileName: sample.displayProfileName, sourceP3: sample.sourceP3)

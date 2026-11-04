@@ -159,6 +159,8 @@ final class PickerCaptureView: NSView {
 
     override var acceptsFirstResponder: Bool { true }
     override var isOpaque: Bool { false }
+    // Capture the first click when the cursor moves to another display.
+    override func acceptsFirstMouse(for event: NSEvent?) -> Bool { true }
 
     override func mouseDown(with event: NSEvent) {
         holding = true
@@ -189,7 +191,8 @@ final class PickerCaptureView: NSView {
                                               precise: event.hasPreciseScrollingDeltas)
         guard steps != 0 else { return }
         let option = event.modifierFlags.contains(.option)
-        for _ in 0..<abs(steps) { onScroll?(steps > 0 ? 1 : -1, option) }
+        // Apply all coalesced scroll steps as one preference update and one render.
+        onScroll?(steps, option)
     }
     override func magnify(with event: NSEvent) {
         // Trackpad pinch is a continuous relative scale gesture. Quantize it to
@@ -198,7 +201,8 @@ final class PickerCaptureView: NSView {
         pinchAccumulator += event.magnification
         let steps = max(-4, min(4, Int(pinchAccumulator / 0.08)))
         if steps != 0 {
-            for _ in 0..<abs(steps) { onScroll?(steps > 0 ? 1 : -1, false) }
+            // Preserve the total zoom delta while avoiding repeated render work.
+            onScroll?(steps, false)
             pinchAccumulator -= CGFloat(steps) * 0.08
         }
         if event.phase == .ended || event.phase == .cancelled { pinchAccumulator = 0 }
@@ -218,10 +222,29 @@ final class PickerPanel: NSPanel {
     override var canBecomeMain: Bool { true }
 }
 
+/// A small, click-through window carries the lens across the boundary between
+/// displays. Unlike the full-screen input surfaces, it must not be constrained
+/// to a particular NSScreen.
+private final class PickerLensPanel: NSPanel {
+    override var canBecomeKey: Bool { false }
+    override var canBecomeMain: Bool { false }
+    override func constrainFrameRect(_ frameRect: NSRect, to screen: NSScreen?) -> NSRect {
+        frameRect
+    }
+}
+
 @MainActor
 final class MagnifierOverlay {
-    private var panel: PickerPanel?
-    private var root: PickerCaptureView?
+    // Each physical display has its own transparent input surface. The visual
+    // lens is NOT a child of these surfaces: it lives in one small, independent
+    // panel that can straddle two monitors like any ordinary Mac window.
+    private struct DisplayPanel {
+        let panel: PickerPanel
+        let root: PickerCaptureView
+    }
+    private var panels: [NSNumber: DisplayPanel] = [:]
+    private var activeDisplayID: NSNumber?
+    private var lensPanel: PickerLensPanel?
     private var lens: MagnifierSurface?
     private(set) var precisionActive = false
     private var multiPickActive = false
@@ -237,11 +260,16 @@ final class MagnifierOverlay {
     var onPrecisionChanged: (() -> Void)?
 
     func show() {
-        guard panel == nil else { return }
-        let fullRect = NSScreen.screens.reduce(CGRect.null) { $0.union($1.frame) }
-        guard !fullRect.isNull else { return }
-        let window = PickerPanel(contentRect: fullRect, styleMask: [.borderless],
-                                 backing: .buffered, defer: false)
+        guard lensPanel == nil else { return }
+        guard let screen = screenUnderPointer() ?? NSScreen.screens.first else { return }
+        let diameter: CGFloat = 320
+        let side = diameter + CGFloat(2 * MagnifierLensGeometry.borderInset)
+        let lens = MagnifierSurface(frame: NSRect(x: 0, y: 0, width: side, height: side))
+        lens.autoresizingMask = [.width, .height]
+        let window = PickerLensPanel(contentRect: NSRect(x: 0, y: 0, width: side, height: side),
+                                     styleMask: [.borderless], backing: .buffered,
+                                     defer: false, screen: screen)
+        window.isReleasedWhenClosed = false
         window.isOpaque = false
         window.backgroundColor = .clear
         window.hasShadow = false
@@ -249,75 +277,141 @@ final class MagnifierOverlay {
         window.collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary, .ignoresCycle]
         window.hidesOnDeactivate = false
         window.isMovable = false
-        window.acceptsMouseMovedEvents = true
-        let root = PickerCaptureView(frame: NSRect(origin: .zero, size: fullRect.size))
-        root.onSelect = { [weak self] action in self?.onPick?(action) }
-        root.onCancel = { [weak self] in self?.onCancel?() }
-        root.onKey = { [weak self] event in self?.handle(event) }
-        root.onScroll = { [weak self] amount, option in
-            guard let self else { return }
-            if option { self.onRadius?(amount * 2) }
-            else { self.onZoom?(amount) }
-        }
-        root.onPrecision = { [weak self] enabled in
-            guard let self else { return }
-            if self.precisionActive != enabled {
+        window.ignoresMouseEvents = true
+        window.contentView = lens
+        self.lensPanel = window
+        self.lens = lens
+        installInputPanels()
+        NSApp.activate(ignoringOtherApps: true)
+        followPointer(NSEvent.mouseLocation, on: screen, diameter: diameter)
+    }
+
+    private func screenUnderPointer() -> NSScreen? {
+        let pointer = NSEvent.mouseLocation
+        return NSScreen.screens.first(where: { $0.frame.contains(pointer) })
+    }
+
+    private func installInputPanels() {
+        for screen in NSScreen.screens {
+            guard let id = screen.deviceDescription[NSDeviceDescriptionKey("NSScreenNumber")] as? NSNumber else {
+                continue
+            }
+            // With a screen parameter, contentRect is LOCAL to that display.
+            // Passing screen.frame here would add the origin a second time on
+            // the monitor left of / above / below the primary one.
+            let panel = PickerPanel(contentRect: NSRect(origin: .zero, size: screen.frame.size),
+                                    styleMask: [.borderless], backing: .buffered,
+                                    defer: false, screen: screen)
+            panel.isReleasedWhenClosed = false
+            // Explicitly establish global Cocoa positioning so view conversion
+            // never depends on which monitor currently owns the key window.
+            panel.setFrame(screen.frame, display: false)
+            panel.isOpaque = false
+            panel.backgroundColor = .clear
+            panel.hasShadow = false
+            panel.level = .screenSaver
+            panel.collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary, .ignoresCycle]
+            panel.hidesOnDeactivate = false
+            panel.isMovable = false
+            panel.acceptsMouseMovedEvents = true
+            panel.ignoresMouseEvents = hoverActive
+
+            let root = PickerCaptureView(frame: NSRect(origin: .zero, size: screen.frame.size))
+            root.onSelect = { [weak self] action in self?.onPick?(action) }
+            root.onCancel = { [weak self] in self?.onCancel?() }
+            root.onKey = { [weak self] event in self?.handle(event) }
+            root.onScroll = { [weak self] amount, option in
+                guard let self else { return }
+                if option { self.onRadius?(amount * 2) }
+                else { self.onZoom?(amount) }
+            }
+            root.onPrecision = { [weak self] enabled in
+                guard let self, self.precisionActive != enabled else { return }
                 self.precisionActive = enabled
                 self.onPrecisionChanged?()
             }
+            panel.contentView = root
+            panels[id] = DisplayPanel(panel: panel, root: root)
+            panel.orderFrontRegardless()
         }
-        let lens = MagnifierSurface(frame: NSRect(x: 0, y: 0, width: 323, height: 323))
-        root.addSubview(lens)
-        window.contentView = root
-        self.panel = window
-        self.root = root
-        self.lens = lens
-        window.orderFrontRegardless()
-        NSApp.activate(ignoringOtherApps: true)
-        window.makeKeyAndOrderFront(nil)
-        window.makeFirstResponder(root)
+        lensPanel?.orderFrontRegardless()
+    }
+
+    /// Called every picker timer cycle, independent of ScreenCaptureKit frames.
+    /// The visible lens crosses a monitor seam CONTINUOUSLY, even while the
+    /// stream is switching between the two displays.
+    func followPointer(_ point: NSPoint, on screen: NSScreen, diameter: CGFloat) {
+        guard lensPanel != nil else { return }
+        if let id = screen.deviceDescription[NSDeviceDescriptionKey("NSScreenNumber")] as? NSNumber {
+            activateScreen(id)
+        }
+        moveLens(to: point, diameter: diameter)
+    }
+
+    private func activateScreen(_ id: NSNumber) {
+        guard let target = panels[id] else { return }
+        if activeDisplayID != id {
+            let previous = activeDisplayID
+            activeDisplayID = id
+            if let previous {
+                panels[previous]?.root.stopTracking()
+                let modifierPrecision = NSEvent.modifierFlags.contains(.control)
+                    || NSEvent.modifierFlags.contains(.shift)
+                if precisionActive != modifierPrecision {
+                    precisionActive = modifierPrecision
+                    onPrecisionChanged?()
+                }
+            }
+            if !hoverActive {
+                target.panel.makeKeyAndOrderFront(nil)
+                target.panel.makeFirstResponder(target.root)
+            }
+            lensPanel?.orderFrontRegardless()
+        }
+    }
+
+    private func moveLens(to point: NSPoint, diameter: CGFloat) {
+        guard let window = lensPanel, let lens else { return }
+        let displays = NSScreen.screens.map { screen in
+            LensViewport(x: Double(screen.frame.minX), y: Double(screen.frame.minY),
+                         width: Double(screen.frame.width), height: Double(screen.frame.height))
+        }
+        guard let placement = MagnifierLensGeometry.floatingFrame(
+            center: ScreenPoint(x: Double(point.x), y: Double(point.y)),
+            diameter: Double(diameter), displays: displays) else { return }
+        let next = NSRect(x: CGFloat(placement.x), y: CGFloat(placement.y),
+                          width: CGFloat(placement.width), height: CGFloat(placement.height))
+        if window.frame != next { window.setFrame(next, display: true) }
+        lens.diameter = diameter
     }
 
     /// Update the Command indicator independently of capture frames and mouse motion.
-    /// This avoids a stale border when the pointer is stationary.
     func setMultiPickIndicator(_ enabled: Bool) {
         guard multiPickActive != enabled else { return }
         multiPickActive = enabled
         lens?.multiPickActive = enabled
     }
 
-    /// Hold fn to let scrolling and pointer events reach the application below.
-    /// Sampling continues through the already-running ScreenCaptureKit stream.
+    /// Hold fn to let scroll and click events pass to the underlying app.
     func setHover(_ enabled: Bool) {
-        guard let panel, hoverActive != enabled else { return }
+        guard hoverActive != enabled else { return }
         hoverActive = enabled
-        panel.ignoresMouseEvents = enabled
-        if !enabled {
-            panel.makeKeyAndOrderFront(nil)
-            if let root { panel.makeFirstResponder(root) }
+        for surface in panels.values { surface.panel.ignoresMouseEvents = enabled }
+        if !enabled, let id = activeDisplayID, let target = panels[id] {
+            target.panel.makeKeyAndOrderFront(nil)
+            target.panel.makeFirstResponder(target.root)
+            lensPanel?.orderFrontRegardless()
         }
     }
 
-    func update(_ sample: SampledPixel, location: NSPoint, format: ColorOutputFormat,
-                value: String, showLabel: Bool, diameter: CGFloat, pickedCount: Int) {
-        guard let panel, let lens else { return }
-        lens.diameter = diameter
+    func update(_ sample: SampledPixel, location: NSPoint, on screen: NSScreen,
+                format: ColorOutputFormat, value: String,
+                showLabel: Bool, diameter: CGFloat, pickedCount: Int) {
+        guard let lens else { return }
+        followPointer(location, on: screen, diameter: diameter)
         lens.precisionActive = precisionActive
         lens.multiPickActive = multiPickActive
         lens.pickedCount = pickedCount
-        let frame = panel.frame
-        // Clamp to the *active display* rather than the virtual desktop's
-        // bounding rectangle (which can contain gaps on multi-screen setups).
-        let display = NSScreen.screens.first(where: { $0.frame.contains(location) })?.frame ?? frame
-        guard let placement = MagnifierLensGeometry.frame(
-            center: ScreenPoint(x: Double(location.x), y: Double(location.y)),
-            diameter: Double(diameter),
-            viewport: LensViewport(x: Double(display.minX), y: Double(display.minY),
-                                   width: Double(display.width), height: Double(display.height)))
-        else { return }
-        lens.frame = NSRect(x: CGFloat(placement.x) - frame.minX,
-                            y: CGFloat(placement.y) - frame.minY,
-                            width: CGFloat(placement.width), height: CGFloat(placement.height))
         lens.patch = sample.patch
         lens.color = sample.color
         lens.formatLabel = format.title
@@ -325,24 +419,37 @@ final class MagnifierOverlay {
         lens.showsLabel = showLabel
     }
 
-    /// Re-fit the existing capture panel when monitors are connected, removed or
-    /// rearranged, without creating a second responder or leaking windows.
+    /// Rebuild input surfaces when topology changes; retain the ONE visible
+    /// lens window and current pick session.
     func refreshDisplayLayout() {
-        guard let panel, let root else { return }
-        let fullRect = NSScreen.screens.reduce(CGRect.null) { $0.union($1.frame) }
-        guard !fullRect.isNull else { return }
-        panel.setFrame(fullRect, display: false)
-        root.frame = NSRect(origin: .zero, size: fullRect.size)
+        guard lensPanel != nil else { return }
+        removeInputPanels()
+        precisionActive = false
+        installInputPanels()
+        if let screen = screenUnderPointer() ?? NSScreen.screens.first {
+            followPointer(NSEvent.mouseLocation, on: screen, diameter: lens?.diameter ?? 320)
+        }
     }
 
-    /// Never retain a previous monitor's preview while capture is reconnecting.
+    private func removeInputPanels() {
+        for surface in panels.values {
+            surface.root.stopTracking()
+            surface.panel.orderOut(nil)
+            surface.panel.close()
+        }
+        panels.removeAll()
+        activeDisplayID = nil
+    }
+
+    /// Never retain a previous monitor's preview while capture reconnects.
     func clearPreview() {
         guard let lens, lens.patch != nil else { return }
         lens.patch = nil
     }
 
     func snapshot() -> NSImage? {
-        guard let lens, let bitmap = lens.bitmapImageRepForCachingDisplay(in: lens.bounds) else { return nil }
+        guard let lens,
+              let bitmap = lens.bitmapImageRepForCachingDisplay(in: lens.bounds) else { return nil }
         lens.cacheDisplay(in: lens.bounds, to: bitmap)
         let image = NSImage(size: lens.bounds.size)
         image.addRepresentation(bitmap)
@@ -350,11 +457,10 @@ final class MagnifierOverlay {
     }
 
     func close() {
-        root?.stopTracking()
-        panel?.orderOut(nil)
-        panel?.close()
-        panel = nil
-        root = nil
+        removeInputPanels()
+        lensPanel?.orderOut(nil)
+        lensPanel?.close()
+        lensPanel = nil
         lens = nil
         precisionActive = false
         multiPickActive = false
@@ -365,8 +471,6 @@ final class MagnifierOverlay {
         let shift = event.modifierFlags.contains(.shift)
         let option = event.modifierFlags.contains(.option)
         let amount = shift ? 10 : 1
-        // Undo is available without leaving the magnifier. Handle the virtual
-        // key codes before character parsing so both keyboard layouts work.
         if (event.keyCode == 6 && event.modifierFlags.contains(.command)) ||
             event.keyCode == 51 || event.keyCode == 117 {
             onUndo?()

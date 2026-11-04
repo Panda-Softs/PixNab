@@ -37,6 +37,27 @@ public enum MagnifierLensGeometry {
                             width: side, height: side)
     }
 
+    /// Place a small independent lens window in the virtual desktop.
+    /// Unlike frame(center:diameter:viewport:), this must NOT clamp to one
+    /// monitor: such clamping makes the lens jump when crossing the seam.
+    /// Keeping the entire circle inside the union bounds also prevents it
+    /// from disappearing off the *outside* edge of the desktop.
+    public static func floatingFrame(center: ScreenPoint, diameter: Double,
+                                     displays: [LensViewport]) -> LensViewport? {
+        guard !displays.isEmpty,
+              displays.allSatisfy({ $0.x.isFinite && $0.y.isFinite &&
+                                   $0.width.isFinite && $0.height.isFinite &&
+                                   $0.width > 0 && $0.height > 0 }) else { return nil }
+        let minX = displays.map(\.x).min()!
+        let minY = displays.map(\.y).min()!
+        let maxX = displays.map { $0.x + $0.width }.max()!
+        let maxY = displays.map { $0.y + $0.height }.max()!
+        guard maxX.isFinite, maxY.isFinite else { return nil }
+        return frame(center: center, diameter: diameter,
+                     viewport: LensViewport(x: minX, y: minY,
+                                            width: maxX - minX, height: maxY - minY))
+    }
+
     /// Local drawing coordinates for a two-line caption inside the lower part
     /// of the circle. The bounding rectangle does not touch the center crosshair.
     public static func labelFrame(diameter: Double) -> LensViewport? {

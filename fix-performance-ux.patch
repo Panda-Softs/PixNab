@@ -1,0 +1,98 @@
+diff --git a/Sources/PixNab/App/AppController.swift b/Sources/PixNab/App/AppController.swift
+index 5b414b3..eef341e 100644
+--- a/Sources/PixNab/App/AppController.swift
++++ b/Sources/PixNab/App/AppController.swift
+@@ -328,14 +328,6 @@ final class AppController: NSObject, ObservableObject, NSMenuDelegate, NSWindowD
+         // Arrow-key offsets are physical pixels relative to the screen under
+         // the real pointer. Carrying them to a screen with another scaling
+         // factor would sample the wrong physical pixel.
+-        let pointer = NSEvent.mouseLocation
+-        if let screen = NSScreen.screens.first(where: { $0.frame.contains(pointer) }),
+-           let id = screen.deviceDescription[NSDeviceDescriptionKey("NSScreenNumber")] as? NSNumber,
+-           id != pointerScreenID {
+-            keyOffsetX = 0
+-            keyOffsetY = 0
+-            pointerScreenID = id
+-        }
+         let location = NSEvent.mouseLocation
+         guard let screen = NSScreen.screens.first(where: { $0.frame.contains(location) }),
+               let number = screen.deviceDescription[NSDeviceDescriptionKey("NSScreenNumber")] as? NSNumber else {
+@@ -346,6 +338,13 @@ final class AppController: NSObject, ObservableObject, NSMenuDelegate, NSWindowD
+             overlay.clearPreview()
+             return
+         }
++        // Resolve the cursor position and display once per tick. Using two
++        // mouse-location snapshots could disagree while crossing the seam.
++        if number != pointerScreenID {
++            keyOffsetX = 0
++            keyOffsetY = 0
++            pointerScreenID = number
++        }
+         if number != currentScreenID && number != pendingDisplayID {
+             pendingDisplayID = number
+             frame = nil; currentSample = nil; lastRenderKey = nil
+diff --git a/Sources/PixNab/Capture/MagnifierOverlay.swift b/Sources/PixNab/Capture/MagnifierOverlay.swift
+index 6192ab5..121d596 100644
+--- a/Sources/PixNab/Capture/MagnifierOverlay.swift
++++ b/Sources/PixNab/Capture/MagnifierOverlay.swift
+@@ -192,7 +192,8 @@ final class PickerCaptureView: NSView {
+                                               precise: event.hasPreciseScrollingDeltas)
+         guard steps != 0 else { return }
+         let option = event.modifierFlags.contains(.option)
+-        for _ in 0..<abs(steps) { onScroll?(steps > 0 ? 1 : -1, option) }
++        // Apply all coalesced scroll steps as one preference update and one render.
++        onScroll?(steps, option)
+     }
+     override func magnify(with event: NSEvent) {
+         // Trackpad pinch is a continuous relative scale gesture. Quantize it to
+@@ -201,7 +202,8 @@ final class PickerCaptureView: NSView {
+         pinchAccumulator += event.magnification
+         let steps = max(-4, min(4, Int(pinchAccumulator / 0.08)))
+         if steps != 0 {
+-            for _ in 0..<abs(steps) { onScroll?(steps > 0 ? 1 : -1, false) }
++            // Preserve the total zoom delta while avoiding repeated render work.
++            onScroll?(steps, false)
+             pinchAccumulator -= CGFloat(steps) * 0.08
+         }
+         if event.phase == .ended || event.phase == .cancelled { pinchAccumulator = 0 }
+diff --git a/Sources/PixNab/UI/ColorStudioView.swift b/Sources/PixNab/UI/ColorStudioView.swift
+index bd10675..c1362e1 100644
+--- a/Sources/PixNab/UI/ColorStudioView.swift
++++ b/Sources/PixNab/UI/ColorStudioView.swift
+@@ -320,12 +320,11 @@ private struct StudioDiscoverView: View {
+         }
+     }
+ 
+-    private var selected: CuratedPalette? {
+-        results.first(where: { $0.id == model.studioPaletteID }) ?? results.first
+-    }
+-
+     var body: some View {
+-        HStack(spacing: 0) {
++        // Compute the 300-palette search result once for this render pass.
++        let results = self.results
++        let selected = results.first(where: { $0.id == model.studioPaletteID }) ?? results.first
++        return HStack(spacing: 0) {
+             VStack(alignment: .leading, spacing: 9) {
+                 HStack {
+                     Text("Palette collection").font(.headline)
+@@ -680,14 +679,16 @@ private struct StudioScalesView: View {
+     @State private var saveError = false
+     @State private var initialized = false
+     init(model: AppController) { self.model = model; self.store = model.store }
+-    private var steps: [ColorScaleStep] { ColorScaleGenerator.generate(from: base.color) }
+-    private var output: String { ColorScaleGenerator.export(steps, name: name, as: format) }
+     private var fileExtension: String {
+         switch format { case .css: return "css"; case .json: return "json"; case .swiftUI: return "swift" }
+     }
+     private func loadCurrent() { base = StudioSelection(model.selectedColor, sourceP3: model.selectedSourceP3) }
+     var body: some View {
+-        ScrollView {
++        // Scale generation performs gamut mapping: reuse one result for swatches,
++        // controls, token preview, and the copy/export actions of this render.
++        let steps = ColorScaleGenerator.generate(from: base.color)
++        let output = ColorScaleGenerator.export(steps, name: name, as: format)
++        return ScrollView {
+             VStack(alignment: .leading, spacing: 19) {
+                 VStack(alignment: .leading, spacing: 4) {
+                     Text("OKLCH Color Scales").font(.title.bold())

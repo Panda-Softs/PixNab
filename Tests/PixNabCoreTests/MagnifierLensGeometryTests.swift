@@ -46,6 +46,51 @@ import Testing
         }
     }
 
+    @Test func testFloatingLensCrossesHorizontalSeamWithoutSnapping() throws {
+        // macOS main monitor at x = 0, external monitor to the right.
+        // Clamping to either display would cause a ~160-point jump.
+        let displays = [LensViewport(x: 0, y: 0, width: 1512, height: 982),
+                        LensViewport(x: 1512, y: -100, width: 1920, height: 1080)]
+        let left = try #require(MagnifierLensGeometry.floatingFrame(
+            center: ScreenPoint(x: 1511, y: 450), diameter: 320, displays: displays))
+        let right = try #require(MagnifierLensGeometry.floatingFrame(
+            center: ScreenPoint(x: 1513, y: 450), diameter: 320, displays: displays))
+        #expect(abs((right.x - left.x) - 2) < 0.001)
+        #expect(left.y == right.y)
+        #expect(left.x < 1512 && left.x + left.width > 1512)
+        #expect(right.x < 1512 && right.x + right.width > 1512)
+    }
+
+    @Test func testFloatingLensCrossesLeftOfPrimaryAndVerticalSeam() throws {
+        let left = LensViewport(x: -1920, y: 0, width: 1920, height: 1080)
+        let main = LensViewport(x: 0, y: 0, width: 1512, height: 982)
+        let a = try #require(MagnifierLensGeometry.floatingFrame(
+            center: ScreenPoint(x: -1, y: 550), diameter: 320, displays: [left, main]))
+        let b = try #require(MagnifierLensGeometry.floatingFrame(
+            center: ScreenPoint(x: 1, y: 550), diameter: 320, displays: [left, main]))
+        #expect(abs(b.x - a.x - 2) < 0.001)
+        let above = LensViewport(x: 0, y: 982, width: 1512, height: 800)
+        let before = try #require(MagnifierLensGeometry.floatingFrame(
+            center: ScreenPoint(x: 640, y: 981), diameter: 320, displays: [main, above]))
+        let after = try #require(MagnifierLensGeometry.floatingFrame(
+            center: ScreenPoint(x: 640, y: 983), diameter: 320, displays: [main, above]))
+        #expect(abs(after.y - before.y - 2) < 0.001)
+    }
+
+    @Test func testFloatingLensOuterEdgeAndInvalidDisplayGeometry() throws {
+        let displays = [LensViewport(x: 0, y: 0, width: 1512, height: 982),
+                        LensViewport(x: 1512, y: 0, width: 1920, height: 1080)]
+        let outer = try #require(MagnifierLensGeometry.floatingFrame(
+            center: ScreenPoint(x: 3431, y: 1079), diameter: 320, displays: displays))
+        #expect(outer.x + outer.width <= 3432)
+        #expect(outer.y + outer.height <= 1080)
+        #expect(MagnifierLensGeometry.floatingFrame(
+            center: ScreenPoint(x: 10, y: 10), diameter: 320, displays: []) == nil)
+        #expect(MagnifierLensGeometry.floatingFrame(
+            center: ScreenPoint(x: 10, y: 10), diameter: 320,
+            displays: [LensViewport(x: 0, y: 0, width: .nan, height: 900)]) == nil)
+    }
+
     @Test func testInvalidGeometryDoesNotCreateAFrame() {
         let screen = LensViewport(x: 0, y: 0, width: 800, height: 600)
         #expect((MagnifierLensGeometry.frame(

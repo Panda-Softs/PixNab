@@ -320,12 +320,11 @@ private struct StudioDiscoverView: View {
         }
     }
 
-    private var selected: CuratedPalette? {
-        results.first(where: { $0.id == model.studioPaletteID }) ?? results.first
-    }
-
     var body: some View {
-        HStack(spacing: 0) {
+        // Compute the 300-palette search result once for this render pass.
+        let results = self.results
+        let selected = results.first(where: { $0.id == model.studioPaletteID }) ?? results.first
+        return HStack(spacing: 0) {
             VStack(alignment: .leading, spacing: 9) {
                 HStack {
                     Text("Palette collection").font(.headline)
@@ -680,14 +679,16 @@ private struct StudioScalesView: View {
     @State private var saveError = false
     @State private var initialized = false
     init(model: AppController) { self.model = model; self.store = model.store }
-    private var steps: [ColorScaleStep] { ColorScaleGenerator.generate(from: base.color) }
-    private var output: String { ColorScaleGenerator.export(steps, name: name, as: format) }
     private var fileExtension: String {
         switch format { case .css: return "css"; case .json: return "json"; case .swiftUI: return "swift" }
     }
     private func loadCurrent() { base = StudioSelection(model.selectedColor, sourceP3: model.selectedSourceP3) }
     var body: some View {
-        ScrollView {
+        // Scale generation performs gamut mapping: reuse one result for swatches,
+        // controls, token preview, and the copy/export actions of this render.
+        let steps = ColorScaleGenerator.generate(from: base.color)
+        let output = ColorScaleGenerator.export(steps, name: name, as: format)
+        return ScrollView {
             VStack(alignment: .leading, spacing: 19) {
                 VStack(alignment: .leading, spacing: 4) {
                     Text("OKLCH Color Scales").font(.title.bold())
