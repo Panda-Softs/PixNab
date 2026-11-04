@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Builds PixNab.app and packages it as a versioned macOS DMG.
+# Builds a Universal 2 (Apple silicon + Intel) PixNab.app and a versioned DMG.
 # Supports ad-hoc signed development releases; does not notarize.
 set -euo pipefail
 
@@ -12,7 +12,7 @@ SHOW_VERSION=0
 
 usage() {
   cat <<'EOF'
-Usage: ./release-dmg.sh [options]
+Usage: ./release-dmg.sh [options]  # Universal 2: arm64 + x86_64
 
   (no options)         Read AppInfo.plist and create dist/PixNab-vX.Y.Z.dmg
   --bump patch         Increment patch version (0.22.2 -> 0.22.3)
@@ -25,7 +25,7 @@ Usage: ./release-dmg.sh [options]
 
 Version changes update AppInfo.plist and increment CFBundleVersion by 1.
 An existing DMG is never overwritten. All temporary staging files are removed.
-This script builds an ad-hoc signed app; public notarization requires Developer ID.
+This script builds a Universal 2 ad-hoc signed app; notarization requires Developer ID.
 EOF
 }
 
@@ -104,7 +104,7 @@ OUTPUT="$ROOT/dist/PixNab-v${NEW_VERSION}.dmg"
 
 [[ "$(uname -s)" == "Darwin" ]] || { echo "DMG creation requires macOS" >&2; exit 1; }
 [[ -f "$ROOT/run.sh" ]] || { echo "Missing $ROOT/run.sh" >&2; exit 1; }
-for tool in codesign ditto hdiutil shasum; do
+for tool in codesign ditto hdiutil shasum lipo swift; do
   command -v "$tool" >/dev/null || { echo "Missing command: $tool" >&2; exit 1; }
 done
 mkdir -p "$ROOT/dist"
@@ -155,10 +155,56 @@ if [[ "$RUN_TESTS" == 1 ]]; then
   ./run.sh --test
 fi
 
-echo 'Building PixNab.app (release)...'
+# Assemble the application with the existing run.sh so localized resources,
+# Info.plist, icon assets and other bundle content keep the project's conventions.
+echo 'Building PixNab.app (release; native architecture for resources)...'
 ./run.sh --build
 APP="$ROOT/dist/PixNab.app"
 [[ -d "$APP" ]] || { echo "Build did not create $APP" >&2; exit 1; }
+
+# Explicitly build *each* CPU architecture in its own SwiftPM scratch directory.
+# This avoids accidentally reusing the host-only output of ./run.sh --build.
+# The two compiled executables are then combined into a Universal 2 Mach-O.
+# NOTE: If future app versions ship embedded frameworks or executable plug-ins,
+# those must be universal and signed as well before packaging.
+echo 'Building arm64 for Apple silicon...'
+ARM_BUILD="$WORKDIR/swift-build-arm64"
+swift build -c release --arch arm64 --product PixNab --scratch-path "$ARM_BUILD"
+ARM_DIR="$(swift build -c release --arch arm64 --scratch-path "$ARM_BUILD" --show-bin-path)"
+ARM_EXEC="$ARM_DIR/PixNab"
+[[ -f "$ARM_EXEC" ]] || { echo "Missing arm64 executable: $ARM_EXEC" >&2; exit 1; }
+[[ "$(lipo -archs "$ARM_EXEC")" == 'arm64' ]] || {
+  echo "Unexpected arm64 build architectures: $(lipo -archs "$ARM_EXEC")" >&2; exit 1;
+}
+
+echo 'Building x86_64 for Intel Macs...'
+INTEL_BUILD="$WORKDIR/swift-build-x86_64"
+swift build -c release --arch x86_64 --product PixNab --scratch-path "$INTEL_BUILD"
+INTEL_DIR="$(swift build -c release --arch x86_64 --scratch-path "$INTEL_BUILD" --show-bin-path)"
+INTEL_EXEC="$INTEL_DIR/PixNab"
+[[ -f "$INTEL_EXEC" ]] || { echo "Missing x86_64 executable: $INTEL_EXEC" >&2; exit 1; }
+[[ "$(lipo -archs "$INTEL_EXEC")" == 'x86_64' ]] || {
+  echo "Unexpected x86_64 build architectures: $(lipo -archs "$INTEL_EXEC")" >&2; exit 1;
+}
+
+APP_EXEC="$APP/Contents/MacOS/PixNab"
+[[ -f "$APP_EXEC" ]] || { echo "Missing app executable: $APP_EXEC" >&2; exit 1; }
+# lipo writes to a new file, so the old signed bundle is never partially
+# overwritten by a failed merge. Re-sign after replacing the executable.
+UNIVERSAL_EXEC="$WORKDIR/PixNab-universal"
+lipo -create "$ARM_EXEC" "$INTEL_EXEC" -output "$UNIVERSAL_EXEC"
+ARCHS="$(lipo -archs "$UNIVERSAL_EXEC")"
+[[ " $ARCHS " == *' arm64 '* && " $ARCHS " == *' x86_64 '* ]] || {
+  echo "Universal merge failed; architectures: $ARCHS" >&2; exit 1;
+}
+install -m 755 "$UNIVERSAL_EXEC" "$APP_EXEC"
+codesign --force --sign - --timestamp=none "$APP"
+codesign --verify --strict --verbose=2 "$APP"
+ARCHS="$(lipo -archs "$APP_EXEC")"
+[[ " $ARCHS " == *' arm64 '* && " $ARCHS " == *' x86_64 '* ]] || {
+  echo "PixNab.app is not universal: $ARCHS" >&2; exit 1;
+}
+printf 'Universal 2 app architectures: %s\n' "$ARCHS"
 
 # Check the assembled bundle's actual version, not just the source plist.
 ACTUAL_VERSION="$(python3 - "$APP/Contents/Info.plist" <<'PY'
@@ -191,7 +237,8 @@ mv "$TEMP_DMG" "$OUTPUT"
 FINISHED=1
 printf '\nCreated: %s\n' "$OUTPUT"
 shasum -a 256 "$OUTPUT"
-printf '\nNote: App signature is ad hoc; this DMG is not notarized by Apple.\n'
+printf '\nArchitecture: Universal 2 (arm64 + x86_64). macOS minimum comes from AppInfo.plist.\n'
+printf 'Note: App signature is ad hoc; this DMG is not notarized by Apple.\n'
 if [[ "$NEW_VERSION" != "$CURRENT_VERSION" ]]; then
   printf 'AppInfo.plist was updated. Review and commit that file before tagging a GitHub release.\n'
 fi
